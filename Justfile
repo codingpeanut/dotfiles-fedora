@@ -86,9 +86,12 @@ caelestia:
         echo "==> Cloning Niri-Caelestia Shell repository..."; \
         git clone https://github.com/Ayushkr2003/niri-caelestia-shell.git "{{ home }}/.config/quickshell/niri-caelestia-shell"; \
     fi
+    @echo "==> Ensuring required Qt6 development dependencies are installed..."
+    sudo dnf install -y qt6-qtmultimedia-devel qt6-qtwayland-devel qt6-qtsvg-devel qt6-qtshadertools-devel
     @echo "==> Building and installing Niri-Caelestia Shell..."
     cd "{{ home }}/.config/quickshell/niri-caelestia-shell" && \
         (git tag -f 1.1.1 >/dev/null 2>&1 || true) && \
+        rm -rf build && \
         cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ && \
         cmake --build build && \
         sudo cmake --install build
