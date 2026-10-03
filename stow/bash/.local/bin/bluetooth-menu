@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec "$HOME/.config/waybar/scripts/bluetooth-menu.sh" "$@"
+exec "$HOME/.config/waybar/scripts/blueman-menu.sh" "$@"
