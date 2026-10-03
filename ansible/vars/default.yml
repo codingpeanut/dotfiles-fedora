@@ -4,11 +4,14 @@
 # COPR repositories to enable
 system_copr_repos:
   - yalter/niri
+  - errornointernet/quickshell
+  - atim/starship
 
 # System RPM packages to install via DNF
 system_packages:
   # Window Manager & Desktop Environment
   - niri
+  - quickshell
   - waybar
   - kitty
   - fuzzel
@@ -18,6 +21,58 @@ system_packages:
   - xdg-desktop-portal-gtk
   - polkit-gnome
 
+  # Chinese Input Method (Fcitx5 Framework & Engines)
+  - fcitx5
+  - fcitx5-chinese-addons
+  - fcitx5-chewing
+  - fcitx5-configtool
+  - fcitx5-gtk3
+  - fcitx5-gtk4
+  - fcitx5-qt5
+  - fcitx5-qt6
+
+  # CJK, Emoji & Base Fonts
+  - google-noto-sans-cjk-fonts
+  - google-noto-serif-cjk-fonts
+  - google-noto-color-emoji-fonts
+  - jetbrains-mono-fonts
+
+  # Desktop Utilities & File Management
+  - nautilus
+  - file-roller
+  - blueman
+  - bluez
+  - bluez-tools
+
+  # Multimedia Codecs (RPM Fusion)
+  - ffmpeg
+  - ffmpeg-libs
+  - gstreamer1-plugins-ugly
+  - gstreamer1-plugins-bad-freeworld
+  - gstreamer1-plugin-openh264
+
+  # Applications & Browsers
+  - google-chrome-stable
+  - code
+
+  # Editors & Text Tools
+  - neovim
+  - vim-enhanced
+
+  # Shell, Prompt & Terminal Aesthetics
+  - starship
+  - zoxide
+  - fzf
+  - eza
+  - bat
+  - fastfetch
+
+  # Developer Runtimes & Package Managers
+  - nodejs
+  - npm
+  - python3
+  - python3-pip
+
   # Core Tools & Workflow
   - stow
   - just
@@ -26,10 +81,8 @@ system_packages:
   - jq
   - ripgrep
   - fd-find
-  - bat
-  - fastfetch
 
-  # Wayland Utilities & Audio / Brightness
+  # Wayland Utilities & Audio / Brightness / Screen Capture
   - wl-clipboard
   - cliphist
   - brightnessctl
@@ -37,16 +90,30 @@ system_packages:
   - swayidle
   - grim
   - slurp
+  - swappy
   - playerctl
   - pamixer
   - pavucontrol
+  - cava
+  - tesseract
+  - tesseract-langpack-eng
+
+  # Build Tools & Libraries (for Caelestia / Quickshell extensions)
+  - cmake
+  - ninja-build
+  - gcc-c++
+  - qt6-qtdeclarative-devel
+  - qt6-qtbase-devel
+  - qt6-qtimageformats
 
 # System services to enable and start (systemd system-level)
-system_services: []
+system_services:
+  - bluetooth
 
 # Flatpak applications to install for current user
 flatpak_user_packages:
   - org.mozilla.firefox
+  - com.discordapp.Discord
 
 # GNU Stow modules to symlink into $HOME
 stow_packages:
@@ -56,3 +123,5 @@ stow_packages:
   - fuzzel
   - mako
   - bash
+  - nvim
+  - starship

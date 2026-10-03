@@ -1,0 +1,44 @@
+---
+# Desktop environment appearance (GTK dark mode, cursor) and Nerd Fonts
+
+- name: Set GNOME color-scheme to prefer-dark
+  ansible.builtin.command:
+    cmd: gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+  changed_when: false
+  failed_when: false
+
+- name: Set GTK theme to Adwaita-dark
+  ansible.builtin.command:
+    cmd: gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+  changed_when: false
+  failed_when: false
+
+- name: Set GNOME cursor theme
+  ansible.builtin.command:
+    cmd: gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
+  changed_when: false
+  failed_when: false
+
+- name: Ensure user fonts directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.local/share/fonts/JetBrainsMono"
+    state: directory
+    mode: "0755"
+
+- name: Check if JetBrainsMono Nerd Font is installed
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.local/share/fonts/JetBrainsMono/JetBrainsMonoNerdFont-Regular.ttf"
+  register: nerd_font_stat
+
+- name: Download and install JetBrainsMono Nerd Font
+  ansible.builtin.unarchive:
+    src: "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz"
+    dest: "{{ ansible_env.HOME }}/.local/share/fonts/JetBrainsMono"
+    remote_src: true
+  when: not nerd_font_stat.stat.exists
+  register: font_unpack
+
+- name: Refresh font cache if new fonts installed
+  ansible.builtin.command:
+    cmd: fc-cache -f
+  when: font_unpack.changed | default(false)

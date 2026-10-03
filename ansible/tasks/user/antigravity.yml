@@ -1,0 +1,14 @@
+---
+# Google Antigravity CLI installation
+
+- name: Check if Antigravity CLI binary exists
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.local/bin/agy"
+  register: agy_binary
+
+- name: Install Antigravity CLI via official script
+  ansible.builtin.shell:
+    cmd: "curl -fsSL https://antigravity.google/cli/install.sh | bash"
+  register: agy_install_result
+  changed_when: true
+  when: not agy_binary.stat.exists

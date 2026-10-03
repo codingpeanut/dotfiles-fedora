@@ -1,0 +1,23 @@
+---
+# Configure system alternatives to link vi and vim to nvim
+
+- name: Check if neovim binary exists
+  ansible.builtin.stat:
+    path: /usr/bin/nvim
+  register: nvim_bin
+
+- name: Configure vi alternative to point to nvim
+  ansible.builtin.command:
+    cmd: alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
+  when: nvim_bin.stat.exists
+  register: vi_alt
+  changed_when: false
+  failed_when: false
+
+- name: Configure vim alternative to point to nvim
+  ansible.builtin.command:
+    cmd: alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
+  when: nvim_bin.stat.exists
+  register: vim_alt
+  changed_when: false
+  failed_when: false

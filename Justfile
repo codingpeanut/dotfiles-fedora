@@ -48,3 +48,27 @@ update:
 status:
     @echo "==> Git status:"
     @git status -s
+
+# Build and install Niri-Caelestia Shell QML modules
+caelestia:
+    @if [ ! -d "$$HOME/.config/quickshell/niri-caelestia-shell" ]; then \
+        echo "==> Cloning Niri-Caelestia Shell repository..."; \
+        git clone https://github.com/Ayushkr2003/niri-caelestia-shell.git "$$HOME/.config/quickshell/niri-caelestia-shell"; \
+    fi
+    @echo "==> Building and installing Niri-Caelestia Shell..."
+    cd "$$HOME/.config/quickshell/niri-caelestia-shell" && \
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ && \
+        cmake --build build && \
+        sudo cmake --install build
+
+# Install or update Antigravity CLI (agy)
+antigravity:
+    @echo "==> Installing / Updating Antigravity CLI..."
+    curl -fsSL https://antigravity.google/cli/install.sh | bash
+
+# Install or update pi-coding-agent via npm
+pi:
+    @echo "==> Installing / Updating pi-coding-agent..."
+    mkdir -p "$$HOME/.npm-global"
+    npm config set prefix "$$HOME/.npm-global"
+    npm install -g @earendil-works/pi-coding-agent

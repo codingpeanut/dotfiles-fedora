@@ -1,0 +1,15 @@
+---
+# Niri-Caelestia Shell (Quickshell adaptation for Niri)
+
+- name: Ensure quickshell config directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/quickshell"
+    state: directory
+    mode: "0755"
+
+- name: Clone Niri-Caelestia Shell repository
+  ansible.builtin.git:
+    repo: "https://github.com/Ayushkr2003/niri-caelestia-shell.git"
+    dest: "{{ ansible_env.HOME }}/.config/quickshell/niri-caelestia-shell"
+    version: main
+    update: false

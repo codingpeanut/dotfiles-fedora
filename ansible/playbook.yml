@@ -27,6 +27,10 @@
       when: system_local_vars_stat.stat.exists
 
   tasks:
+    - name: Configure third-party RPM repositories
+      ansible.builtin.import_tasks: tasks/system/repos.yml
+      tags: [repos]
+
     - name: Configure COPR repositories
       ansible.builtin.import_tasks: tasks/system/copr.yml
       tags: [copr]
@@ -34,6 +38,10 @@
     - name: Install system RPM packages
       ansible.builtin.import_tasks: tasks/system/packages.yml
       tags: [packages]
+
+    - name: Configure system alternatives (vi/vim to nvim)
+      ansible.builtin.import_tasks: tasks/system/alternatives.yml
+      tags: [alternatives]
 
     - name: Setup Flatpak repository
       ansible.builtin.import_tasks: tasks/system/flatpak_repo.yml
@@ -46,7 +54,7 @@
 # ------------------------------------------------------------------------------
 # Play 2: User-level configuration (Non-root / become: false)
 # ------------------------------------------------------------------------------
-- name: User Configuration (Dotfiles, User Flatpaks, User Systemd)
+- name: User Configuration (Dotfiles, User Flatpaks, User Systemd, Dev Tools)
   hosts: localhost
   connection: local
   become: false
@@ -74,6 +82,22 @@
     - name: Install user Flatpak applications
       ansible.builtin.import_tasks: tasks/user/flatpak_apps.yml
       tags: [flatpak]
+
+    - name: Configure developer CLI tools and agents
+      ansible.builtin.import_tasks: tasks/user/dev_tools.yml
+      tags: [dev_tools]
+
+    - name: Setup Google Antigravity CLI
+      ansible.builtin.import_tasks: tasks/user/antigravity.yml
+      tags: [antigravity]
+
+    - name: Setup Niri-Caelestia Shell
+      ansible.builtin.import_tasks: tasks/user/caelestia.yml
+      tags: [caelestia]
+
+    - name: Configure desktop theme, cursor and fonts
+      ansible.builtin.import_tasks: tasks/user/desktop_theme.yml
+      tags: [theme, fonts]
 
     - name: Configure user services
       ansible.builtin.import_tasks: tasks/user/services.yml

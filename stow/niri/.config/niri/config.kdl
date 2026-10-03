@@ -2,10 +2,27 @@
 // Managed by dotfiles (GNU Stow + Ansible)
 
 // -----------------------------------------------------------------------------
+// Environment Variables
+// -----------------------------------------------------------------------------
+environment {
+    GTK_IM_MODULE "fcitx"
+    QT_IM_MODULE "fcitx"
+    XMODIFIERS "@im=fcitx"
+}
+
+// -----------------------------------------------------------------------------
 // Auto-start Services & Daemons
 // -----------------------------------------------------------------------------
-spawn-at-startup "waybar"
-spawn-at-startup "mako"
+// Caelestia Shell (Quickshell adaptation for Niri)
+spawn-at-startup "quickshell" "-c" "niri-caelestia-shell" "-n"
+
+// Fallback status bar & notification daemon (uncomment if not using Caelestia)
+// spawn-at-startup "waybar"
+// spawn-at-startup "mako"
+
+spawn-at-startup "fcitx5" "-d"
+spawn-at-startup "blueman-applet"
+spawn-at-startup "swayidle" "-w" "timeout" "300" "swaylock -f" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors"
 spawn-at-startup "/usr/libexec/polkit-gnome-authentication-agent-1"
 spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
 
@@ -76,7 +93,10 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 binds {
     // Basic Application Launchers & Actions
     Mod+Return { spawn "kitty"; }
+    Mod+E { spawn "nautilus"; }
+    Mod+Space hotkey-overlay-title="Caelestia App Launcher" { spawn "quickshell" "-c" "niri-caelestia-shell" "ipc" "call" "drawers" "toggle" "launcher"; }
     Mod+D { spawn "fuzzel"; }
+    Mod+Alt+L { spawn "swaylock"; }
     Mod+Q { close-window; }
     Mod+Shift+E { quit; }
 
