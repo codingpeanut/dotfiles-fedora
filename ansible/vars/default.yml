@@ -45,6 +45,7 @@ system_packages:
   - bluez
   - bluez-tools
   - nm-connection-editor
+  - network-manager-applet
 
   # Multimedia Codecs (RPM Fusion GStreamer plugins)
   - gstreamer1-plugins-ugly

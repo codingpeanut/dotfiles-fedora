@@ -23,6 +23,7 @@ spawn-at-startup "mako"
 
 spawn-at-startup "fcitx5" "-d"
 spawn-at-startup "blueman-applet"
+spawn-at-startup "nm-applet" "--indicator"
 spawn-at-startup "swayidle" "-w" "timeout" "300" "swaylock -f" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors"
 spawn-at-startup "/usr/libexec/polkit-mate-authentication-agent-1"
 spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
@@ -87,6 +88,23 @@ layout {
 prefer-no-csd
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+// -----------------------------------------------------------------------------
+// Window Rules (Floating dialogs & utility popups)
+// -----------------------------------------------------------------------------
+window-rule {
+    match app-id=r#"^(pavucontrol|nm-connection-editor|blueman-manager|gnome-control-center|gnome-calendar|gnome-system-monitor)$"#
+    open-floating true
+    default-column-width { fixed 900; }
+    default-window-height { fixed 600; }
+}
+
+window-rule {
+    match app-id="floating_window"
+    open-floating true
+    default-column-width { fixed 960; }
+    default-window-height { fixed 640; }
+}
 
 // -----------------------------------------------------------------------------
 // Keybindings

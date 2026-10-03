@@ -45,6 +45,7 @@ window#waybar {
 #memory,
 #network,
 #pulseaudio,
+#power-profiles-daemon,
 #tray {
     padding: 0 10px;
     margin: 4px 3px;
@@ -59,10 +60,12 @@ window#waybar {
 #cpu:hover,
 #memory:hover,
 #network:hover,
-#pulseaudio:hover {
+#pulseaudio:hover,
+#power-profiles-daemon:hover {
     background-color: rgba(65, 72, 104, 0.95);
     color: #ffffff;
     box-shadow: 0 0 6px rgba(122, 162, 247, 0.4);
+    cursor: pointer;
 }
 
 #clock {
@@ -84,6 +87,23 @@ window#waybar {
 
 #network.disconnected {
     color: #f7768e;
+}
+
+#power-profiles-daemon {
+    padding: 0 8px;
+    color: #e0af68;
+}
+
+#power-profiles-daemon.performance {
+    color: #f7768e;
+}
+
+#power-profiles-daemon.balanced {
+    color: #7aa2f7;
+}
+
+#power-profiles-daemon.power-saver {
+    color: #9ece6a;
 }
 
 #battery {
