@@ -53,6 +53,10 @@ stow:
         echo "Backing up existing regular ~/.vimrc to ~/.vimrc.bak..."; \
         mv "{{ home }}/.vimrc" "{{ home }}/.vimrc.bak"; \
     fi
+    @if [ -f "{{ home }}/.config/niri/config.kdl" ] && [ ! -L "{{ home }}/.config/niri/config.kdl" ]; then \
+        echo "Backing up existing regular ~/.config/niri/config.kdl to ~/.config/niri/config.kdl.bak..."; \
+        mv "{{ home }}/.config/niri/config.kdl" "{{ home }}/.config/niri/config.kdl.bak"; \
+    fi
     @cd stow && for pkg in */; do \
         pkg_name="${pkg%/}"; \
         echo "Stowing $pkg_name..."; \
