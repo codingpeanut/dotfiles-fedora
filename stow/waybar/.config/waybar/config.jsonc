@@ -24,17 +24,43 @@
     },
 
     "clock": {
-        "format": "{:%Y-%m-%d %H:%M}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+        "format": " {:%H:%M  󰃭 %Y-%m-%d}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "month",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "format": {
+                "months": "<span color='#bb9af7'><b>{}</b></span>",
+                "days": "<span color='#c0caf5'><b>{}</b></span>",
+                "weeks": "<span color='#7aa2f7'><b>W{}</b></span>",
+                "weekdays": "<span color='#e0af68'><b>{}</b></span>",
+                "today": "<span color='#f7768e'><b><u>{}</u></b></span>"
+            }
+        },
+        "actions": {
+            "on-click-right": "mode",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        },
+        "on-click": "gnome-calendar || true"
     },
 
     "cpu": {
         "format": " {usage}%",
-        "tooltip": false
+        "interval": 2,
+        "tooltip": true,
+        "on-click": "kitty -e btop",
+        "on-click-right": "gnome-system-monitor"
     },
 
     "memory": {
-        "format": " {}%"
+        "format": " {percentage}%",
+        "interval": 2,
+        "tooltip-format": "RAM: {used:0.1f}GiB / {total:0.1f}GiB ({percentage}%)\nSwap: {swapUsed:0.1f}GiB / {swapTotal:0.1f}GiB",
+        "on-click": "kitty -e btop",
+        "on-click-right": "gnome-system-monitor"
     },
 
     "battery": {
@@ -45,15 +71,22 @@
         "format": "{icon} {capacity}%",
         "format-charging": "󱐋 {capacity}%",
         "format-plugged": " {capacity}%",
-        "format-icons": ["", "", "", "", ""]
+        "format-alt": "{time} {icon}",
+        "format-icons": ["", "", "", "", ""],
+        "tooltip-format": "Power: {power:.1f}W\nRemaining: {time}",
+        "on-click": "gnome-control-center power || kitty -e btop",
+        "on-click-right": "powerprofilesctl set performance || powerprofilesctl set balanced"
     },
 
     "network": {
-        "format-wifi": " {signalStrength}%",
+        "format-wifi": " {essid} ({signalStrength}%)",
         "format-ethernet": "󰈀 {ipaddr}",
-        "tooltip-format": "{ifname} via {gwaddr}",
-        "format-linked": "{ifname} (No IP)",
-        "format-disconnected": "⚠ Disconnected"
+        "tooltip-format": "Interface: {ifname}\nIP: {ipaddr}/{cidr}\nGateway: {gwaddr}\nStrength: {signalStrength}%",
+        "format-linked": "󱚵 {ifname} (No IP)",
+        "format-disconnected": "󰤭 Disconnected",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "on-click": "nm-connection-editor || gnome-control-center wifi || kitty -e nmtui",
+        "on-click-right": "kitty -e nmtui"
     },
 
     "pulseaudio": {
@@ -62,6 +95,8 @@
         "format-icons": {
             "default": ["", "", ""]
         },
-        "on-click": "pavucontrol"
+        "scroll-step": 5,
+        "on-click": "pavucontrol",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
     }
 }

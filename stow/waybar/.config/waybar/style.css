@@ -48,9 +48,21 @@ window#waybar {
 #tray {
     padding: 0 10px;
     margin: 4px 3px;
-    background-color: rgba(36, 40, 59, 0.8);
+    background-color: rgba(36, 40, 59, 0.85);
     border-radius: 6px;
     color: #c0caf5;
+    transition: all 0.2s ease-in-out;
+}
+
+#clock:hover,
+#battery:hover,
+#cpu:hover,
+#memory:hover,
+#network:hover,
+#pulseaudio:hover {
+    background-color: rgba(65, 72, 104, 0.95);
+    color: #ffffff;
+    box-shadow: 0 0 6px rgba(122, 162, 247, 0.4);
 }
 
 #clock {
@@ -58,8 +70,32 @@ window#waybar {
     font-weight: bold;
 }
 
-#battery.charging, #battery.plugged {
+#cpu {
+    color: #7aa2f7;
+}
+
+#memory {
+    color: #b4f9f8;
+}
+
+#network {
+    color: #7dcfff;
+}
+
+#network.disconnected {
+    color: #f7768e;
+}
+
+#battery {
     color: #9ece6a;
+}
+
+#battery.warning:not(.charging) {
+    color: #e0af68;
+}
+
+#battery.charging, #battery.plugged {
+    color: #73daca;
 }
 
 #battery.critical:not(.charging) {
@@ -72,7 +108,24 @@ window#waybar {
     animation-direction: alternate;
 }
 
+#pulseaudio {
+    color: #2ac3de;
+}
+
 #pulseaudio.muted {
     background-color: #414868;
     color: #f7768e;
+}
+
+tooltip {
+    background: #1a1b26;
+    border: 1px solid #7aa2f7;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+tooltip label {
+    color: #c0caf5;
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 13px;
 }

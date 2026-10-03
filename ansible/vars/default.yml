@@ -44,6 +44,7 @@ system_packages:
   - blueman
   - bluez
   - bluez-tools
+  - nm-connection-editor
 
   # Multimedia Codecs (RPM Fusion GStreamer plugins)
   - gstreamer1-plugins-ugly
@@ -59,6 +60,7 @@ system_packages:
   - vim-enhanced
 
   # Shell, Prompt & Terminal Aesthetics
+  - btop
   - starship
   - zoxide
   - fzf
