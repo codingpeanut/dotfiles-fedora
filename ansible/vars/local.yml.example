@@ -3,19 +3,18 @@
 # Copy this file to `local.yml` (which is git-ignored) to customize this machine.
 
 # Extra DNF packages for this specific machine
-system_packages_extra:
-  # - tlp
-  # - neovim
-  # - docker-ce
+system_packages_extra: []
+# Examples:
+#   - tlp
+#   - docker-ce
 
 # Extra COPR repositories for this specific machine
 system_copr_repos_extra: []
 
 # Extra Flatpak applications for this specific machine
-flatpak_user_packages_extra:
-  # - com.discordapp.Discord
-  # - com.spotify.Client
-  # - com.visualstudio.code
+flatpak_user_packages_extra: []
+# Examples:
+#   - com.spotify.Client
 
 # Extra Stow modules for this specific machine
 stow_packages_extra: []

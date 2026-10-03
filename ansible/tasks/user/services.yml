@@ -5,4 +5,4 @@
     scope: user
     enabled: true
     state: started
-  loop: "{{ (user_services | default([])) + (user_services_extra | default([])) }}"
+  loop: "{{ (user_services | default([], true)) + (user_services_extra | default([], true)) }}"

@@ -7,7 +7,7 @@
 - name: Enable configured COPR repositories
   ansible.builtin.command:
     cmd: "dnf copr enable -y {{ item }}"
-  loop: "{{ (system_copr_repos | default([])) + (system_copr_repos_extra | default([])) }}"
+  loop: "{{ (system_copr_repos | default([], true)) + (system_copr_repos_extra | default([], true)) }}"
   register: copr_result
   changed_when: "'Enabling a Copr repo' in copr_result.stdout or 'Repository successfully enabled' in copr_result.stdout"
   failed_when: copr_result.rc != 0 and 'already enabled' not in copr_result.stderr

@@ -13,6 +13,6 @@
 - name: Apply dotfiles symlinks using GNU Stow
   ansible.builtin.command:
     cmd: "stow -v -R -d {{ playbook_dir }}/../stow -t {{ ansible_env.HOME }} {{ item }}"
-  loop: "{{ (stow_packages | default([])) + (stow_packages_extra | default([])) }}"
+  loop: "{{ (stow_packages | default([], true)) + (stow_packages_extra | default([], true)) }}"
   register: stow_result
   changed_when: "'LINK:' in stow_result.stderr or 'UNLINK:' in stow_result.stderr"
