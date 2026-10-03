@@ -44,9 +44,9 @@ window#waybar {
 #cpu,
 #memory,
 #network,
+#custom-bluetooth,
 #bluetooth,
 #pulseaudio,
-#custom-power,
 #tray {
     padding: 0 10px;
     margin: 4px 3px;
@@ -61,9 +61,9 @@ window#waybar {
 #cpu:hover,
 #memory:hover,
 #network:hover,
+#custom-bluetooth:hover,
 #bluetooth:hover,
-#pulseaudio:hover,
-#custom-power:hover {
+#pulseaudio:hover {
     background-color: rgba(65, 72, 104, 0.95);
     color: #ffffff;
 }
@@ -89,16 +89,20 @@ window#waybar {
     color: #f7768e;
 }
 
+#custom-bluetooth,
 #bluetooth {
     color: #7aa2f7;
     padding: 0 12px;
     font-size: 14px;
 }
 
+#custom-bluetooth.connected,
 #bluetooth.connected {
     color: #9ece6a;
 }
 
+#custom-bluetooth.disabled,
+#custom-bluetooth.off,
 #bluetooth.disabled,
 #bluetooth.off {
     color: #565f89;
@@ -135,11 +139,6 @@ window#waybar {
     color: #f7768e;
 }
 
-#custom-power {
-    color: #f7768e;
-    padding: 0 12px;
-    font-size: 14px;
-}
 
 tooltip {
     background: #1a1b26;

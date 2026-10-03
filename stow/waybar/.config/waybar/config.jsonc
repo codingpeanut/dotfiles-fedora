@@ -7,7 +7,7 @@
     "margin-right": 10,
     "modules-left": ["niri/workspaces", "niri/window"],
     "modules-center": ["clock"],
-    "modules-right": ["pulseaudio", "network", "bluetooth", "cpu", "memory", "battery", "custom/power", "tray"],
+    "modules-right": ["pulseaudio", "network", "custom/bluetooth", "cpu", "memory", "battery", "tray"],
 
     "niri/workspaces": {
         "format": "{index}",
@@ -49,15 +49,9 @@
         "format-charging": "󱐋 {capacity}%",
         "format-plugged": " {capacity}%",
         "format-icons": ["", "", "", "", ""],
-        "tooltip-format": "{timeTo}\n\n• 左鍵：GNOME 電源設定\n• 右鍵：關機/重啟電源選單",
-        "on-click": "gnome-control-center power",
-        "on-click-right": "~/.config/waybar/scripts/power-menu.sh"
-    },
-
-    "custom/power": {
-        "format": "⏻",
-        "tooltip-format": "電源選單 (關機、重新啟動、休眠、鎖定)\n\n• 點擊：開啟電源選單",
-        "on-click": "~/.config/waybar/scripts/power-menu.sh"
+        "tooltip-format": "{timeTo}\n\n• 左鍵：開啟開關機選單 (wlogout)\n• 右鍵：開啟 GNOME 電源設定",
+        "on-click": "power-menu",
+        "on-click-right": "gnome-control-center power"
     },
 
     "network": {
@@ -74,21 +68,14 @@
         "on-click-right": "nm-connection-editor"
     },
 
-    "bluetooth": {
-        "format": "󰂯",
-        "format-disabled": "󰂲",
-        "format-off": "󰂲",
-        "format-on": "󰂯",
-        "format-connected": "󰂱 {device_alias}",
-        "format-connected-battery": "󰂱 {device_alias} ({device_battery_percentage}%)",
-        "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} 個已連線裝置\n\n• 左鍵：開啟 Blueman 藍芽管理器\n• 右鍵：原生 Blueman 右鍵選單\n• 中鍵：切換藍芽開關",
-        "tooltip-format-disabled": "藍芽已關閉\n\n• 左鍵：開啟 Blueman 管理器\n• 中鍵：開啟藍芽",
-        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n已連線裝置:\n{device_enumerate}\n\n• 左鍵：開啟 Blueman 藍芽管理器\n• 右鍵：原生 Blueman 右鍵選單\n• 中鍵：切換藍芽開關",
-        "tooltip-format-enumerate-connected": "• {device_alias}\t{device_address}",
-        "tooltip-format-enumerate-connected-battery": "• {device_alias}\t{device_address} ({device_battery_percentage}%)",
+    "custom/bluetooth": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "~/.config/waybar/scripts/bluetooth-status.sh",
+        "interval": 2,
         "on-click": "blueman-manager",
         "on-click-middle": "bash -c \"bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on\"",
-        "on-click-right": "python3 ~/.config/waybar/scripts/blueman-menu.py"
+        "on-click-right": "blueman-manager"
     },
 
     "pulseaudio": {

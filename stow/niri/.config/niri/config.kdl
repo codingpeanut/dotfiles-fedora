@@ -22,7 +22,7 @@ spawn-at-startup "mako"
 // spawn-at-startup "quickshell" "-c" "niri-caelestia-shell" "-n"
 
 spawn-at-startup "fcitx5" "-d"
-spawn-at-startup "blueman-applet"
+// spawn-at-startup "blueman-applet"
 spawn-at-startup "nm-applet" "--indicator"
 spawn-at-startup "swayidle" "-w" "timeout" "300" "swaylock -f" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors"
 spawn-at-startup "/usr/libexec/polkit-mate-authentication-agent-1"
@@ -166,8 +166,9 @@ binds {
     Mod+Space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Mod+E hotkey-overlay-title="File Manager: nautilus" { spawn "nautilus"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
-    Mod+Shift+E hotkey-overlay-title="Session & Power Menu" { spawn-sh "~/.config/waybar/scripts/power-menu.sh"; }
-    Ctrl+Alt+Delete hotkey-overlay-title="Session & Power Menu" { spawn-sh "~/.config/waybar/scripts/power-menu.sh"; }
+    Mod+Shift+E hotkey-overlay-title="Session & Power Menu: wlogout" { spawn "power-menu"; }
+    Ctrl+Alt+Delete hotkey-overlay-title="Session & Power Menu: wlogout" { spawn "power-menu"; }
+    XF86PowerOff allow-when-locked=true hotkey-overlay-title="Session & Power Menu" { spawn "power-menu"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
@@ -342,10 +343,6 @@ binds {
 
     // Toggle keyboard shortcuts inhibitor
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
-
-    // Quit actions
-    Mod+Shift+E { quit; }
-    Ctrl+Alt+Delete { quit; }
 
     // Power off monitors
     Mod+Shift+P { power-off-monitors; }

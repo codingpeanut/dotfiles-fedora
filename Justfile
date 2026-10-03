@@ -81,9 +81,8 @@ pull:
 
 # Reload running desktop components (Waybar, Mako)
 reload:
-    @echo "==> Restarting Waybar, Mako, and Blueman Applet..."
+    @echo "==> Restarting Waybar and Mako..."
     @(killall blueman-applet 2>/dev/null || true)
-    @(blueman-applet >/dev/null 2>&1 &)
     @(killall waybar 2>/dev/null || true)
     @sleep 0.3
     @(nohup waybar >/dev/null 2>&1 &)
@@ -92,8 +91,8 @@ reload:
 
 # Install required desktop dependencies for Waybar buttons and utilities
 deps:
-    @echo "==> Installing desktop dependencies (Waybar, popups, audio, network, monitor, bluetooth)..."
-    sudo dnf install -y btop NetworkManager-tui nm-connection-editor network-manager-applet gnome-calendar pavucontrol waybar mako fuzzel kitty swaylock swayidle brightnessctl playerctl wl-clipboard cliphist libnotify fzf blueman bluez bluez-tools python3-dbus
+    @echo "==> Installing desktop dependencies (Waybar, popups, audio, network, monitor, bluetooth, wlogout)..."
+    sudo dnf install -y btop NetworkManager-tui nm-connection-editor network-manager-applet gnome-calendar pavucontrol waybar mako fuzzel kitty swaylock swayidle brightnessctl playerctl wl-clipboard cliphist libnotify fzf blueman bluez bluez-tools python3-dbus wlogout
     sudo systemctl enable --now bluetooth || true
 
 # One-stop command to fix everything: pull, install dependencies, stow, restart bars, and verify
@@ -120,13 +119,14 @@ edit app="niri":
         waybar) $${EDITOR:-nvim} stow/waybar/.config/waybar/config.jsonc && pkill -SIGUSR2 waybar 2>/dev/null || true ;; \
         kitty) $${EDITOR:-nvim} stow/kitty/.config/kitty/kitty.conf ;; \
         fuzzel) $${EDITOR:-nvim} stow/fuzzel/.config/fuzzel/fuzzel.ini ;; \
-        *) echo "Unknown app: {{ app }}. Available: niri, waybar, kitty, fuzzel" ;; \
+        wlogout) $${EDITOR:-nvim} stow/wlogout/.config/wlogout/layout ;; \
+        *) echo "Unknown app: {{ app }}. Available: niri, waybar, kitty, fuzzel, wlogout" ;; \
     esac
 
 # Check all desktop, CLI, and Wayland dependencies
 check:
     @echo "==> Checking system dependencies..."
-    @for cmd in niri waybar kitty fuzzel mako btop nmtui nm-connection-editor nm-applet pavucontrol gnome-calendar swaylock swayidle brightnessctl playerctl wl-paste cliphist fcitx5 notify-send fzf blueman-manager; do \
+    @for cmd in niri waybar kitty fuzzel mako btop nmtui nm-connection-editor nm-applet pavucontrol gnome-calendar swaylock swayidle brightnessctl playerctl wl-paste cliphist fcitx5 notify-send fzf blueman-manager wlogout; do \
         if command -v "$$cmd" >/dev/null 2>&1; then \
             printf "  [✓] %-24s found (%s)\n" "$$cmd" "$$(command -v "$$cmd")"; \
         else \

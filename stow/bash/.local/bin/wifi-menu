@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec "$HOME/.config/waybar/scripts/wifi-menu.sh" "$@"
+exec gnome-control-center wifi "$@"

@@ -48,6 +48,7 @@ system_packages:
   - network-manager-applet
   - NetworkManager-tui
   - gnome-calendar
+  - gnome-control-center
 
   # Multimedia Codecs (RPM Fusion GStreamer plugins)
   - gstreamer1-plugins-ugly
@@ -92,6 +93,7 @@ system_packages:
   - brightnessctl
   - swaylock
   - swayidle
+  - wlogout
   - grim
   - slurp
   - swappy
@@ -143,3 +145,4 @@ stow_packages:
   - bash
   - nvim
   - starship
+  - wlogout

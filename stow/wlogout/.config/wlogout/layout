@@ -1,0 +1,30 @@
+{
+    "label" : "lock",
+    "action" : "swaylock -f",
+    "text" : "鎖定 (Lock)",
+    "keybind" : "l"
+}
+{
+    "label" : "suspend",
+    "action" : "systemctl suspend",
+    "text" : "睡眠 (Suspend)",
+    "keybind" : "u"
+}
+{
+    "label" : "logout",
+    "action" : "niri msg action quit --skip-confirmation 2>/dev/null || pkill niri",
+    "text" : "登出 (Logout)",
+    "keybind" : "e"
+}
+{
+    "label" : "reboot",
+    "action" : "systemctl reboot",
+    "text" : "重新啟動 (Reboot)",
+    "keybind" : "r"
+}
+{
+    "label" : "shutdown",
+    "action" : "systemctl poweroff",
+    "text" : "關閉電腦 (Shutdown)",
+    "keybind" : "s"
+}
