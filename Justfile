@@ -23,6 +23,14 @@ user:
 # Fast direct Stow re-link for all packages without running Ansible
 stow:
     @echo "==> Stowing all packages into $HOME..."
+    @if [ -f "$$HOME/.bashrc" ] && [ ! -L "$$HOME/.bashrc" ]; then \
+        echo "Backing up existing regular ~/.bashrc to ~/.bashrc.bak..."; \
+        mv "$$HOME/.bashrc" "$$HOME/.bashrc.bak"; \
+    fi
+    @if [ -f "$$HOME/.vimrc" ] && [ ! -L "$$HOME/.vimrc" ]; then \
+        echo "Backing up existing regular ~/.vimrc to ~/.vimrc.bak..."; \
+        mv "$$HOME/.vimrc" "$$HOME/.vimrc.bak"; \
+    fi
     @cd stow && for pkg in */; do \
         pkg_name=$${pkg%/}; \
         echo "Stowing $$pkg_name..."; \

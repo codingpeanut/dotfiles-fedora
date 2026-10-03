@@ -1,7 +1,7 @@
 ---
 - name: Ensure target user directories exist as real directories before stowing
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/{{ item }}"
+    path: "{{ ansible_facts['user_dir'] | default(ansible_env.HOME) }}/{{ item }}"
     state: directory
     mode: "0755"
   loop:
@@ -10,9 +10,29 @@
     - .local/bin
     - .local/share
 
+- name: Check if ~/.bashrc is a regular file (not a symlink)
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['user_dir'] | default(ansible_env.HOME) }}/.bashrc"
+  register: bashrc_stat
+
+- name: Backup existing regular ~/.bashrc before stowing
+  ansible.builtin.command:
+    cmd: "mv {{ ansible_facts['user_dir'] | default(ansible_env.HOME) }}/.bashrc {{ ansible_facts['user_dir'] | default(ansible_env.HOME) }}/.bashrc.bak"
+  when: bashrc_stat.stat.exists and not bashrc_stat.stat.islnk
+
+- name: Check if ~/.vimrc is a regular file (not a symlink)
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['user_dir'] | default(ansible_env.HOME) }}/.vimrc"
+  register: vimrc_stat
+
+- name: Backup existing regular ~/.vimrc before stowing
+  ansible.builtin.command:
+    cmd: "mv {{ ansible_facts['user_dir'] | default(ansible_env.HOME) }}/.vimrc {{ ansible_facts['user_dir'] | default(ansible_env.HOME) }}/.vimrc.bak"
+  when: vimrc_stat.stat.exists and not vimrc_stat.stat.islnk
+
 - name: Apply dotfiles symlinks using GNU Stow
   ansible.builtin.command:
-    cmd: "stow -v -R -d {{ playbook_dir }}/../stow -t {{ ansible_env.HOME }} {{ item }}"
+    cmd: "stow -v -R -d {{ playbook_dir }}/../stow -t {{ ansible_facts['user_dir'] | default(ansible_env.HOME) }} {{ item }}"
   loop: "{{ (stow_packages | default([], true)) + (stow_packages_extra | default([], true)) }}"
   register: stow_result
   changed_when: "'LINK:' in stow_result.stderr or 'UNLINK:' in stow_result.stderr"
