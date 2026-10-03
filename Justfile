@@ -97,9 +97,12 @@ caelestia:
     cd "{{ home }}/.config/quickshell/niri-caelestia-shell" && \
         (git tag -f 1.1.1 >/dev/null 2>&1 || true) && \
         rm -rf build && \
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ && \
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ -DINSTALL_QMLDIR=usr/lib64/qt6/qml -DINSTALL_LIBDIR=usr/lib64/caelestia && \
         cmake --build build && \
-        sudo cmake --install build
+        sudo cmake --install build && \
+        (if [ -d "/usr/lib/qt6/qml/Caelestia" ] && [ ! -d "/usr/lib64/qt6/qml/Caelestia" ]; then \
+            sudo cp -r /usr/lib/qt6/qml/Caelestia /usr/lib64/qt6/qml/; \
+        fi)
 
 # Install or update Antigravity CLI (agy)
 antigravity:
