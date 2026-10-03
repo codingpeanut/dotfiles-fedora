@@ -53,12 +53,16 @@
     },
 
     "network": {
-        "format-wifi": " {essid} ({signalStrength}%)",
+        "interval": 5,
+        "format-wifi": "{icon} {essid} ({signalStrength}%)",
         "format-ethernet": "󰈀 {ipaddr}",
-        "tooltip-format": "{ifname} via {gwaddr}",
-        "format-linked": "{ifname} (No IP)",
-        "format-disconnected": "⚠ Disconnected",
-        "on-click": "kitty --class floating_window -e nmtui",
+        "tooltip-format": "󰈀 {ifname} via {gwaddr}",
+        "tooltip-format-wifi": " {essid} ({signalStrength}%)\n⇣ {bandwidthDownBytes}  ⇡ {bandwidthUpBytes}\nIP: {ipaddr}\nFrequency: {frequency}MHz\nInterface: {ifname}",
+        "tooltip-format-disconnected": "󰤮 Disconnected (Click to scan Wi-Fi)",
+        "format-linked": "󰈀 {ifname} (No IP)",
+        "format-disconnected": "󰤮 Disconnected",
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+        "on-click": "kitty --class floating_window -e nmtui connect",
         "on-click-right": "nm-connection-editor"
     },
 
