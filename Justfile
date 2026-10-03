@@ -82,6 +82,7 @@ pull:
 # Reload running desktop components (Waybar, Mako)
 reload:
     @echo "==> Restarting Waybar and Mako..."
+    @(killall blueman-applet 2>/dev/null || true)
     @(killall waybar 2>/dev/null || true)
     @sleep 0.3
     @(nohup waybar >/dev/null 2>&1 &)

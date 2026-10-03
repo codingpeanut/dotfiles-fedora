@@ -90,7 +90,12 @@ window#waybar {
     color: #7aa2f7;
 }
 
-#bluetooth.disabled {
+#bluetooth.connected {
+    color: #9ece6a;
+}
+
+#bluetooth.disabled,
+#bluetooth.off {
     color: #565f89;
 }
 
