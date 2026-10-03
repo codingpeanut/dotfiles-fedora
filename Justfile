@@ -91,8 +91,9 @@ reload:
 
 # Install required desktop dependencies for Waybar buttons and utilities
 deps:
-    @echo "==> Installing desktop dependencies (Waybar, popups, audio, network, monitor)..."
-    sudo dnf install -y btop NetworkManager-tui nm-connection-editor network-manager-applet gnome-calendar pavucontrol waybar mako fuzzel kitty swaylock swayidle brightnessctl playerctl wl-clipboard cliphist libnotify fzf
+    @echo "==> Installing desktop dependencies (Waybar, popups, audio, network, monitor, bluetooth)..."
+    sudo dnf install -y btop NetworkManager-tui nm-connection-editor network-manager-applet gnome-calendar pavucontrol waybar mako fuzzel kitty swaylock swayidle brightnessctl playerctl wl-clipboard cliphist libnotify fzf blueman bluez bluez-tools
+    sudo systemctl enable --now bluetooth || true
 
 # One-stop command to fix everything: pull, install dependencies, stow, restart bars, and verify
 fix:
@@ -124,7 +125,7 @@ edit app="niri":
 # Check all desktop, CLI, and Wayland dependencies
 check:
     @echo "==> Checking system dependencies..."
-    @for cmd in niri waybar kitty fuzzel mako btop nmtui nm-connection-editor nm-applet pavucontrol gnome-calendar swaylock swayidle brightnessctl playerctl wl-paste cliphist fcitx5 notify-send fzf; do \
+    @for cmd in niri waybar kitty fuzzel mako btop nmtui nm-connection-editor nm-applet pavucontrol gnome-calendar swaylock swayidle brightnessctl playerctl wl-paste cliphist fcitx5 notify-send fzf blueman-manager; do \
         if command -v "$$cmd" >/dev/null 2>&1; then \
             printf "  [✓] %-24s found (%s)\n" "$$cmd" "$$(command -v "$$cmd")"; \
         else \

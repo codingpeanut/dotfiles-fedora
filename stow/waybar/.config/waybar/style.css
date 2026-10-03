@@ -44,6 +44,7 @@ window#waybar {
 #cpu,
 #memory,
 #network,
+#bluetooth,
 #pulseaudio,
 #tray {
     padding: 0 10px;
@@ -88,6 +89,8 @@ window#waybar {
 
 #bluetooth {
     color: #7aa2f7;
+    padding: 0 12px;
+    font-size: 14px;
 }
 
 #bluetooth.connected {
