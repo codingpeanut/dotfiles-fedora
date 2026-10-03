@@ -85,6 +85,7 @@ caelestia:
     fi
     @echo "==> Building and installing Niri-Caelestia Shell..."
     cd "$$HOME/.config/quickshell/niri-caelestia-shell" && \
+        (git tag -f 1.1.1 >/dev/null 2>&1 || true) && \
         cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ && \
         cmake --build build && \
         sudo cmake --install build
