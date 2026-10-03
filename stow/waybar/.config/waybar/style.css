@@ -62,8 +62,6 @@ window#waybar {
 #pulseaudio:hover {
     background-color: rgba(65, 72, 104, 0.95);
     color: #ffffff;
-    box-shadow: 0 0 6px rgba(122, 162, 247, 0.4);
-    cursor: pointer;
 }
 
 #clock {
