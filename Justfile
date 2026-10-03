@@ -71,6 +71,45 @@ unstow:
         stow -v -D -t "{{ home }}" "$pkg_name"; \
     done
 
+# One-command sync: pull latest, auto-stow, and reload desktop bars
+pull:
+    @echo "==> Pulling latest dotfiles from remote..."
+    @git pull --rebase --autostash || (echo "==> Auto-resolving conflict with origin/main..." && git reset --hard origin/main)
+    @just stow
+    @just reload
+    @echo "==> All dotfiles synced, stowed, and reloaded successfully!"
+
+# Reload running desktop components (Waybar, Mako)
+reload:
+    @echo "==> Reloading Waybar and Mako..."
+    @if pgrep -x waybar >/dev/null; then \
+        pkill -SIGUSR2 waybar; \
+    else \
+        waybar >/dev/null 2>&1 & \
+    fi
+    @if pgrep -x mako >/dev/null; then \
+        makoctl reload 2>/dev/null || true; \
+    else \
+        mako >/dev/null 2>&1 & \
+    fi
+
+# One-command commit & push local changes to GitHub
+push msg="chore: update dotfiles":
+    @git add -A
+    @git commit -m "{{ msg }}" || true
+    @git push origin main
+    @echo "==> Changes pushed to GitHub successfully."
+
+# Quick-edit specific configuration files
+edit app="niri":
+    @case "{{ app }}" in \
+        niri) $${EDITOR:-nvim} stow/niri/.config/niri/config.kdl ;; \
+        waybar) $${EDITOR:-nvim} stow/waybar/.config/waybar/config.jsonc && pkill -SIGUSR2 waybar 2>/dev/null || true ;; \
+        kitty) $${EDITOR:-nvim} stow/kitty/.config/kitty/kitty.conf ;; \
+        fuzzel) $${EDITOR:-nvim} stow/fuzzel/.config/fuzzel/fuzzel.ini ;; \
+        *) echo "Unknown app: {{ app }}. Available: niri, waybar, kitty, fuzzel" ;; \
+    esac
+
 # Upgrade system packages and Flatpaks
 update:
     sudo dnf upgrade -y
