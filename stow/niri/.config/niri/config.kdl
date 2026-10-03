@@ -14,12 +14,12 @@ environment {
 // -----------------------------------------------------------------------------
 // Auto-start Services & Daemons
 // -----------------------------------------------------------------------------
-// Caelestia Shell (Quickshell adaptation for Niri)
-spawn-at-startup "quickshell" "-c" "niri-caelestia-shell" "-n"
+// Status bar & notification daemon
+spawn-at-startup "waybar"
+spawn-at-startup "mako"
 
-// Fallback status bar & notification daemon (uncomment if not using Caelestia)
-// spawn-at-startup "waybar"
-// spawn-at-startup "mako"
+// Caelestia Shell (Quickshell adaptation - disabled for now)
+// spawn-at-startup "quickshell" "-c" "niri-caelestia-shell" "-n"
 
 spawn-at-startup "fcitx5" "-d"
 spawn-at-startup "blueman-applet"
@@ -100,7 +100,7 @@ binds {
     Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+Return hotkey-overlay-title=null { spawn "kitty"; }
     Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
-    Mod+Space hotkey-overlay-title="Caelestia App Launcher" { spawn "quickshell" "-c" "niri-caelestia-shell" "ipc" "call" "drawers" "toggle" "launcher"; }
+    Mod+Space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Mod+E hotkey-overlay-title="File Manager: nautilus" { spawn "nautilus"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
