@@ -92,7 +92,7 @@ caelestia:
     fi
     @echo "==> Ensuring required Qt6, Caelestia and libcava dependencies are installed..."
     sudo dnf copr enable -y celestelove/libcava || true
-    sudo dnf install -y qt6-qtmultimedia-devel qt6-qtwayland-devel qt6-qtsvg-devel qt6-qtshadertools-devel libqalculate-devel aubio-devel pipewire-devel libddcutil-devel libcava-devel
+    sudo dnf install -y qt6-qtmultimedia-devel qt6-qtwayland-devel qt6-qtsvg-devel qt6-qtshadertools-devel qt6-qt5compat qt6-qt5compat-devel libqalculate-devel aubio-devel pipewire-devel libddcutil-devel libcava-devel
     @echo "==> Building and installing Niri-Caelestia Shell..."
     cd "{{ home }}/.config/quickshell/niri-caelestia-shell" && \
         (git tag -f 1.1.1 >/dev/null 2>&1 || true) && \

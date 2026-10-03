@@ -107,6 +107,8 @@ system_packages:
   - qt6-qtsvg-devel
   - qt6-qtshadertools-devel
   - qt6-qtimageformats
+  - qt6-qt5compat
+  - qt6-qt5compat-devel
   - libqalculate-devel
   - aubio-devel
   - pipewire-devel
