@@ -23,7 +23,7 @@ spawn-at-startup "quickshell" "-c" "niri-caelestia-shell" "-n"
 spawn-at-startup "fcitx5" "-d"
 spawn-at-startup "blueman-applet"
 spawn-at-startup "swayidle" "-w" "timeout" "300" "swaylock -f" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors"
-spawn-at-startup "/usr/libexec/polkit-gnome-authentication-agent-1"
+spawn-at-startup "/usr/libexec/polkit-mate-authentication-agent-1"
 spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
 
 // -----------------------------------------------------------------------------
@@ -142,9 +142,9 @@ binds {
     Mod+Shift+5 { move-column-to-workspace 5; }
 
     // Media & Hardware Keys
-    XF86AudioRaiseVolume allow-when-locked=true { spawn "pamixer" "-i" "5"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn "pamixer" "-d" "5"; }
-    XF86AudioMute        allow-when-locked=true { spawn "pamixer" "-t"; }
+    XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "-l" "1.5" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+    XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
     XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "set" "+5%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-"; }
 

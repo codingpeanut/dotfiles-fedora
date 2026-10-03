@@ -37,3 +37,10 @@
     disable_gpg_check: true
   register: rpmfusion_nonfree_res
   failed_when: false
+
+- name: Swap ffmpeg-free with full ffmpeg from RPM Fusion
+  ansible.builtin.command:
+    cmd: dnf swap -y ffmpeg-free ffmpeg --allowerasing
+  register: ffmpeg_swap_result
+  changed_when: "'Upgraded' in ffmpeg_swap_result.stdout or 'Installed' in ffmpeg_swap_result.stdout or 'Removed' in ffmpeg_swap_result.stdout"
+  failed_when: false

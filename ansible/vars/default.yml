@@ -19,7 +19,7 @@ system_packages:
   - distrobox
   - xdg-desktop-portal-gnome
   - xdg-desktop-portal-gtk
-  - polkit-gnome
+  - mate-polkit
 
   # Chinese Input Method (Fcitx5 Framework & Engines)
   - fcitx5
@@ -44,9 +44,7 @@ system_packages:
   - bluez
   - bluez-tools
 
-  # Multimedia Codecs (RPM Fusion)
-  - ffmpeg
-  - ffmpeg-libs
+  # Multimedia Codecs (RPM Fusion GStreamer plugins)
   - gstreamer1-plugins-ugly
   - gstreamer1-plugins-bad-freeworld
   - gstreamer1-plugin-openh264
@@ -92,7 +90,6 @@ system_packages:
   - slurp
   - swappy
   - playerctl
-  - pamixer
   - pavucontrol
   - cava
   - tesseract
