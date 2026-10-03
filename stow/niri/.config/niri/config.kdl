@@ -136,7 +136,7 @@ window-rule {
     default-window-height { fixed 600; }
 }
 
-// Generic floating terminal popups (btop, etc.)
+// Generic floating terminal popups (btop, wifi-menu, etc.)
 window-rule {
     match app-id="floating_window"
     open-floating true
@@ -144,12 +144,11 @@ window-rule {
     default-window-height { fixed 640; }
 }
 
-// Interactive desktop popups (Wi-Fi, Volume, Bluetooth menus)
 window-rule {
-    match app-id="desktop_popup"
+    match title=r#"(?i)wi-fi manager"#
     open-floating true
-    default-column-width { fixed 680; }
-    default-window-height { fixed 480; }
+    default-column-width { fixed 960; }
+    default-window-height { fixed 640; }
 }
 
 // -----------------------------------------------------------------------------
