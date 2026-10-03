@@ -7,7 +7,7 @@
     "margin-right": 10,
     "modules-left": ["niri/workspaces", "niri/window"],
     "modules-center": ["clock"],
-    "modules-right": ["pulseaudio", "network", "bluetooth", "cpu", "memory", "battery", "tray"],
+    "modules-right": ["pulseaudio", "network", "bluetooth", "cpu", "memory", "battery", "custom/power", "tray"],
 
     "niri/workspaces": {
         "format": "{index}",
@@ -49,7 +49,15 @@
         "format-charging": "󱐋 {capacity}%",
         "format-plugged": " {capacity}%",
         "format-icons": ["", "", "", "", ""],
-        "on-click": "gnome-control-center power"
+        "tooltip-format": "{timeTo}\n\n• 左鍵：GNOME 電源設定\n• 右鍵：關機/重啟電源選單",
+        "on-click": "gnome-control-center power",
+        "on-click-right": "~/.config/waybar/scripts/power-menu.sh"
+    },
+
+    "custom/power": {
+        "format": "⏻",
+        "tooltip-format": "電源選單 (關機、重新啟動、休眠、鎖定)\n\n• 點擊：開啟電源選單",
+        "on-click": "~/.config/waybar/scripts/power-menu.sh"
     },
 
     "network": {
