@@ -81,8 +81,9 @@ pull:
 
 # Reload running desktop components (Waybar, Mako)
 reload:
-    @echo "==> Restarting Waybar and Mako..."
+    @echo "==> Restarting Waybar, Mako, and Blueman Applet..."
     @(killall blueman-applet 2>/dev/null || true)
+    @(blueman-applet >/dev/null 2>&1 &)
     @(killall waybar 2>/dev/null || true)
     @sleep 0.3
     @(nohup waybar >/dev/null 2>&1 &)
@@ -92,7 +93,7 @@ reload:
 # Install required desktop dependencies for Waybar buttons and utilities
 deps:
     @echo "==> Installing desktop dependencies (Waybar, popups, audio, network, monitor, bluetooth)..."
-    sudo dnf install -y btop NetworkManager-tui nm-connection-editor network-manager-applet gnome-calendar pavucontrol waybar mako fuzzel kitty swaylock swayidle brightnessctl playerctl wl-clipboard cliphist libnotify fzf blueman bluez bluez-tools
+    sudo dnf install -y btop NetworkManager-tui nm-connection-editor network-manager-applet gnome-calendar pavucontrol waybar mako fuzzel kitty swaylock swayidle brightnessctl playerctl wl-clipboard cliphist libnotify fzf blueman bluez bluez-tools python3-dbus
     sudo systemctl enable --now bluetooth || true
 
 # One-stop command to fix everything: pull, install dependencies, stow, restart bars, and verify
