@@ -6,7 +6,41 @@ set -euo pipefail
 
 # 1. Prefer wlogout (mature graphical Wayland logout menu)
 if command -v wlogout >/dev/null 2>&1; then
-    exec wlogout -b 5 -c 20 -r 20 "$@"
+    # Calculate screen margins dynamically so the buttons are centered and square (1:1 aspect ratio)
+    read -r m_tb m_lr col_gap < <(python3 -c "
+import json, subprocess
+
+w, h = 1920, 1080
+try:
+    p = subprocess.run(['niri', 'msg', '-j', 'outputs'], capture_output=True, text=True, timeout=0.8)
+    if p.returncode == 0 and p.stdout.strip():
+        d = json.loads(p.stdout)
+        outs = d if isinstance(d, list) else list(d.values())
+        for o in outs:
+            if 'logical' in o and isinstance(o['logical'], dict):
+                w, h = int(o['logical']['width']), int(o['logical']['height'])
+                break
+            elif 'logical_size' in o and isinstance(o['logical_size'], dict):
+                w, h = int(o['logical_size']['width']), int(o['logical_size']['height'])
+                break
+            elif 'current_mode' in o and isinstance(o['current_mode'], dict):
+                s = float(o.get('scale', 1.0)) or 1.0
+                w, h = int(o['current_mode']['width'] / s), int(o['current_mode']['height'] / s)
+                break
+except Exception:
+    pass
+
+num_btns = 5
+gap = 24
+btn_size = max(140, min(220, int(h * 0.18)))
+total_w = num_btns * btn_size + (num_btns - 1) * gap
+total_h = btn_size
+tb = max(20, (h - total_h) // 2)
+lr = max(20, (w - total_w) // 2)
+print(f'{tb} {lr} {gap}')
+" 2>/dev/null || echo "443 427 24")
+
+    exec wlogout -b 5 -c "$col_gap" -r 0 -T "$m_tb" -B "$m_tb" -L "$m_lr" -R "$m_lr" "$@"
 fi
 
 # 2. Fallback to fuzzel if wlogout is not installed yet

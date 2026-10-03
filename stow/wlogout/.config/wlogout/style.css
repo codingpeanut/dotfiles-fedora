@@ -14,14 +14,14 @@ button {
     border-color: #24283b;
     color: #c0caf5;
     background-color: #1a1b26;
-    margin: 16px;
+    margin: 0;
     background-repeat: no-repeat;
-    background-position: center 36%;
-    background-size: 54px;
+    background-position: center 32%;
+    background-size: 48px;
     font-family: "JetBrains Mono", "Noto Sans CJK TC", sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
-    padding-top: 96px;
+    padding-top: 88px;
     transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
