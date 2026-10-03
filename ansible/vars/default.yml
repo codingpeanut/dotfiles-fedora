@@ -112,7 +112,7 @@ user_services: []
 
 # Flatpak applications to install for current user
 flatpak_user_packages:
-  - org.mozilla.firefox
+  # - org.mozilla.firefox # Optional: Fedora already includes Firefox RPM out of the box
   - com.discordapp.Discord
 
 # GNU Stow modules to symlink into $HOME

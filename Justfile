@@ -5,20 +5,20 @@ default:
     @just --list
 
 # Apply full configuration (system packages + dotfiles + user services)
-apply:
-    ansible-playbook -i ansible/inventory.ini ansible/playbook.yml --ask-become-pass
+apply *args:
+    ansible-playbook -i ansible/inventory.ini ansible/playbook.yml --ask-become-pass {{ args }}
 
 # Sync and apply dotfiles symlinks via GNU Stow
-dotfiles:
-    ansible-playbook -i ansible/inventory.ini ansible/playbook.yml --tags dotfiles
+dotfiles *args:
+    ansible-playbook -i ansible/inventory.ini ansible/playbook.yml --tags dotfiles {{ args }}
 
 # Run only system-level configuration (DNF packages, COPR repos, systemd services)
-system:
-    ansible-playbook -i ansible/inventory.ini ansible/playbook.yml --tags system --ask-become-pass
+system *args:
+    ansible-playbook -i ansible/inventory.ini ansible/playbook.yml --tags system --ask-become-pass {{ args }}
 
 # Run only user-level configuration (dotfiles, flatpaks, user services)
-user:
-    ansible-playbook -i ansible/inventory.ini ansible/playbook.yml --tags user
+user *args:
+    ansible-playbook -i ansible/inventory.ini ansible/playbook.yml --tags user {{ args }}
 
 # Fast direct Stow re-link for all packages without running Ansible
 stow:
