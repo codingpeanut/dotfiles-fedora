@@ -1,6 +1,8 @@
 # Justfile - Declarative dotfiles & system manager
 # Inspired by NixOS declarative workflow for Fedora
 
+home := env("HOME")
+
 default:
     @just --list
 
@@ -42,27 +44,27 @@ reset-flathub:
 
 # Fast direct Stow re-link for all packages without running Ansible
 stow:
-    @echo "==> Stowing all packages into $HOME..."
-    @if [ -f "$$HOME/.bashrc" ] && [ ! -L "$$HOME/.bashrc" ]; then \
+    @echo "==> Stowing all packages into {{ home }}..."
+    @if [ -f "{{ home }}/.bashrc" ] && [ ! -L "{{ home }}/.bashrc" ]; then \
         echo "Backing up existing regular ~/.bashrc to ~/.bashrc.bak..."; \
-        mv "$$HOME/.bashrc" "$$HOME/.bashrc.bak"; \
+        mv "{{ home }}/.bashrc" "{{ home }}/.bashrc.bak"; \
     fi
-    @if [ -f "$$HOME/.vimrc" ] && [ ! -L "$$HOME/.vimrc" ]; then \
+    @if [ -f "{{ home }}/.vimrc" ] && [ ! -L "{{ home }}/.vimrc" ]; then \
         echo "Backing up existing regular ~/.vimrc to ~/.vimrc.bak..."; \
-        mv "$$HOME/.vimrc" "$$HOME/.vimrc.bak"; \
+        mv "{{ home }}/.vimrc" "{{ home }}/.vimrc.bak"; \
     fi
     @cd stow && for pkg in */; do \
-        pkg_name=$${pkg%/}; \
-        echo "Stowing $$pkg_name..."; \
-        stow -v -R -t "$$HOME" "$$pkg_name"; \
+        pkg_name="${pkg%/}"; \
+        echo "Stowing $pkg_name..."; \
+        stow -v -R -t "{{ home }}" "$pkg_name"; \
     done
 
 # Remove Stow symlinks
 unstow:
-    @echo "==> Unstowing all packages from $HOME..."
+    @echo "==> Unstowing all packages from {{ home }}..."
     @cd stow && for pkg in */; do \
-        pkg_name=$${pkg%/}; \
-        stow -v -D -t "$$HOME" "$$pkg_name"; \
+        pkg_name="${pkg%/}"; \
+        stow -v -D -t "{{ home }}" "$pkg_name"; \
     done
 
 # Upgrade system packages and Flatpaks
@@ -79,12 +81,13 @@ status:
 
 # Build and install Niri-Caelestia Shell QML modules
 caelestia:
-    @if [ ! -d "$$HOME/.config/quickshell/niri-caelestia-shell" ]; then \
+    @rm -rf *HOME 2>/dev/null || true
+    @if [ ! -d "{{ home }}/.config/quickshell/niri-caelestia-shell" ]; then \
         echo "==> Cloning Niri-Caelestia Shell repository..."; \
-        git clone https://github.com/Ayushkr2003/niri-caelestia-shell.git "$$HOME/.config/quickshell/niri-caelestia-shell"; \
+        git clone https://github.com/Ayushkr2003/niri-caelestia-shell.git "{{ home }}/.config/quickshell/niri-caelestia-shell"; \
     fi
     @echo "==> Building and installing Niri-Caelestia Shell..."
-    cd "$$HOME/.config/quickshell/niri-caelestia-shell" && \
+    cd "{{ home }}/.config/quickshell/niri-caelestia-shell" && \
         (git tag -f 1.1.1 >/dev/null 2>&1 || true) && \
         cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ && \
         cmake --build build && \
@@ -98,6 +101,6 @@ antigravity:
 # Install or update pi-coding-agent via npm
 pi:
     @echo "==> Installing / Updating pi-coding-agent..."
-    mkdir -p "$$HOME/.npm-global"
-    npm config set prefix "$$HOME/.npm-global"
+    mkdir -p "{{ home }}/.npm-global"
+    npm config set prefix "{{ home }}/.npm-global"
     npm install -g @earendil-works/pi-coding-agent
