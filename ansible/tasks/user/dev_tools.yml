@@ -3,20 +3,19 @@
 
 - name: Ensure user npm global bin directory exists
   ansible.builtin.file:
-    path: "{{ ansible_facts['user_dir'] | default(ansible_env.HOME) }}/.npm-global"
+    path: "{{ ansible_facts['user_dir'] | default(lookup('env', 'HOME')) }}/.npm-global"
     state: directory
     mode: "0755"
 
 - name: Configure npm prefix to ~/.npm-global
   ansible.builtin.command:
-    cmd: npm config set prefix "{{ ansible_facts['user_dir'] | default(ansible_env.HOME) }}/.npm-global"
+    cmd: npm config set prefix "{{ ansible_facts['user_dir'] | default(lookup('env', 'HOME')) }}/.npm-global"
   register: npm_prefix_result
   changed_when: false
-  when: ansible_facts['which_npm'] is defined or true
 
 - name: Install or update pi-coding-agent globally
   ansible.builtin.command:
-    cmd: npm install -g @earendil-works/pi-coding-agent
+    cmd: npm install -g --ignore-scripts @earendil-works/pi-coding-agent
   register: npm_pi_result
   changed_when: "'added' in npm_pi_result.stdout or 'updated' in npm_pi_result.stdout"
   failed_when: npm_pi_result.rc != 0

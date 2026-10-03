@@ -4,8 +4,14 @@
     name: flatpak
     state: present
 
-- name: Add Flathub remote repository
+- name: Add Flathub remote repository (system-level)
   ansible.builtin.command:
     cmd: "flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo"
   register: flathub_result
   changed_when: flathub_result.rc == 0 and flathub_result.stdout != ""
+
+- name: Ensure system Flathub is unfiltered and enabled
+  ansible.builtin.command:
+    cmd: "flatpak remote-modify flathub --enable --no-filter"
+  changed_when: false
+  failed_when: false

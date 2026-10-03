@@ -107,6 +107,9 @@ system_packages:
 system_services:
   - bluetooth
 
+# User services to enable and start (systemd user-level)
+user_services: []
+
 # Flatpak applications to install for current user
 flatpak_user_packages:
   - org.mozilla.firefox

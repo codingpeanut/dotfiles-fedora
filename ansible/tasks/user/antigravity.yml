@@ -3,7 +3,7 @@
 
 - name: Check if Antigravity CLI binary exists
   ansible.builtin.stat:
-    path: "{{ ansible_facts['user_dir'] | default(ansible_env.HOME) }}/.local/bin/agy"
+    path: "{{ ansible_facts['user_dir'] | default(lookup('env', 'HOME')) }}/.local/bin/agy"
   register: agy_binary
 
 - name: Install Antigravity CLI via official script
