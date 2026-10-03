@@ -20,6 +20,26 @@ system *args:
 user *args:
     ansible-playbook -i ansible/inventory.ini ansible/playbook.yml --tags user {{ args }}
 
+# Install user Flatpak applications directly with live progress bar
+flatpaks:
+    @echo "==> Ensuring user Flathub remote is configured..."
+    @flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    @flatpak remote-modify --user flathub --enable --no-filter
+    @echo "==> Installing declarative user Flatpaks (live interactive progress bar)..."
+    flatpak install --user -y flathub com.discordapp.Discord
+
+# Accelerate Flathub downloads by switching to Asian mirror (SJTU)
+mirror-flathub:
+    @echo "==> Switching user Flathub to SJTU mirror (https://mirror.sjtu.edu.cn/flathub)..."
+    flatpak remote-modify --user flathub --url=https://mirror.sjtu.edu.cn/flathub
+    @echo "==> Switched to mirror. Run 'just flatpaks' to test speed."
+
+# Reset user Flathub to official global CDN
+reset-flathub:
+    @echo "==> Resetting user Flathub to official global CDN..."
+    flatpak remote-modify --user flathub --url=https://dl.flathub.org/repo
+    @echo "==> Flathub reset to default."
+
 # Fast direct Stow re-link for all packages without running Ansible
 stow:
     @echo "==> Stowing all packages into $HOME..."
