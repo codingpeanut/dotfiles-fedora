@@ -1,0 +1,8 @@
+---
+- name: Enable and start user-level systemd services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    scope: user
+    enabled: true
+    state: started
+  loop: "{{ (user_services | default([])) + (user_services_extra | default([])) }}"

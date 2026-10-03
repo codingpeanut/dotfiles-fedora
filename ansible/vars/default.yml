@@ -1,0 +1,58 @@
+---
+# Default declarative configuration for Fedora
+
+# COPR repositories to enable
+system_copr_repos:
+  - yalter/niri
+
+# System RPM packages to install via DNF
+system_packages:
+  # Window Manager & Desktop Environment
+  - niri
+  - waybar
+  - kitty
+  - fuzzel
+  - mako
+  - distrobox
+  - xdg-desktop-portal-gnome
+  - xdg-desktop-portal-gtk
+  - polkit-gnome
+
+  # Core Tools & Workflow
+  - stow
+  - just
+  - git
+  - curl
+  - jq
+  - ripgrep
+  - fd-find
+  - bat
+  - fastfetch
+
+  # Wayland Utilities & Audio / Brightness
+  - wl-clipboard
+  - cliphist
+  - brightnessctl
+  - swaylock
+  - swayidle
+  - grim
+  - slurp
+  - playerctl
+  - pamixer
+  - pavucontrol
+
+# System services to enable and start (systemd system-level)
+system_services: []
+
+# Flatpak applications to install for current user
+flatpak_user_packages:
+  - org.mozilla.firefox
+
+# GNU Stow modules to symlink into $HOME
+stow_packages:
+  - niri
+  - waybar
+  - kitty
+  - fuzzel
+  - mako
+  - bash

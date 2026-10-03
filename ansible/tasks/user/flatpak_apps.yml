@@ -1,0 +1,8 @@
+---
+- name: Install declarative user Flatpak applications
+  ansible.builtin.command:
+    cmd: "flatpak install --user --noninteractive -y flathub {{ item }}"
+  loop: "{{ (flatpak_user_packages | default([])) + (flatpak_user_packages_extra | default([])) }}"
+  register: flatpak_install_result
+  changed_when: "'Installing' in flatpak_install_result.stdout or 'Updating' in flatpak_install_result.stdout"
+  failed_when: flatpak_install_result.rc != 0 and 'already installed' not in flatpak_install_result.stderr

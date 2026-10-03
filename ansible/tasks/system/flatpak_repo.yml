@@ -1,0 +1,11 @@
+---
+- name: Ensure flatpak is installed
+  ansible.builtin.dnf:
+    name: flatpak
+    state: present
+
+- name: Add Flathub remote repository
+  ansible.builtin.command:
+    cmd: "flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo"
+  register: flathub_result
+  changed_when: flathub_result.rc == 0 and flathub_result.stdout != ""

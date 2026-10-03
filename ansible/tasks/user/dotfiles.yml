@@ -1,0 +1,18 @@
+---
+- name: Ensure target user directories exist as real directories before stowing
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - .config
+    - .local
+    - .local/bin
+    - .local/share
+
+- name: Apply dotfiles symlinks using GNU Stow
+  ansible.builtin.command:
+    cmd: "stow -v -R -d {{ playbook_dir }}/../stow -t {{ ansible_env.HOME }} {{ item }}"
+  loop: "{{ (stow_packages | default([])) + (stow_packages_extra | default([])) }}"
+  register: stow_result
+  changed_when: "'LINK:' in stow_result.stderr or 'UNLINK:' in stow_result.stderr"

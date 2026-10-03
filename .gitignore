@@ -1,0 +1,12 @@
+# Local host variable overrides
+ansible/vars/local.yml
+
+# Ansible retry files
+*.retry
+
+# OS / Editor temporary files
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/

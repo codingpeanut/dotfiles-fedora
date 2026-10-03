@@ -1,0 +1,7 @@
+---
+- name: Enable and start system-level systemd services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  loop: "{{ (system_services | default([])) + (system_services_extra | default([])) }}"

@@ -1,0 +1,80 @@
+---
+# ==============================================================================
+# Declarative Fedora Workstation Playbook
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Play 1: System-level configuration (Root / become: true)
+# ------------------------------------------------------------------------------
+- name: System Configuration (Fedora RPMs, COPR, Flathub, Systemd)
+  hosts: localhost
+  connection: local
+  become: true
+  tags: [system]
+
+  vars_files:
+    - vars/default.yml
+
+  pre_tasks:
+    - name: Check if local overrides exist
+      ansible.builtin.stat:
+        path: "{{ playbook_dir }}/vars/local.yml"
+      register: system_local_vars_stat
+
+    - name: Load local overrides if present
+      ansible.builtin.include_vars:
+        file: "{{ playbook_dir }}/vars/local.yml"
+      when: system_local_vars_stat.stat.exists
+
+  tasks:
+    - name: Configure COPR repositories
+      ansible.builtin.import_tasks: tasks/system/copr.yml
+      tags: [copr]
+
+    - name: Install system RPM packages
+      ansible.builtin.import_tasks: tasks/system/packages.yml
+      tags: [packages]
+
+    - name: Setup Flatpak repository
+      ansible.builtin.import_tasks: tasks/system/flatpak_repo.yml
+      tags: [flatpak_repo]
+
+    - name: Configure system services
+      ansible.builtin.import_tasks: tasks/system/services.yml
+      tags: [services]
+
+# ------------------------------------------------------------------------------
+# Play 2: User-level configuration (Non-root / become: false)
+# ------------------------------------------------------------------------------
+- name: User Configuration (Dotfiles, User Flatpaks, User Systemd)
+  hosts: localhost
+  connection: local
+  become: false
+  tags: [user]
+
+  vars_files:
+    - vars/default.yml
+
+  pre_tasks:
+    - name: Check if local overrides exist
+      ansible.builtin.stat:
+        path: "{{ playbook_dir }}/vars/local.yml"
+      register: user_local_vars_stat
+
+    - name: Load local overrides if present
+      ansible.builtin.include_vars:
+        file: "{{ playbook_dir }}/vars/local.yml"
+      when: user_local_vars_stat.stat.exists
+
+  tasks:
+    - name: Deploy dotfiles symlinks via GNU Stow
+      ansible.builtin.import_tasks: tasks/user/dotfiles.yml
+      tags: [dotfiles]
+
+    - name: Install user Flatpak applications
+      ansible.builtin.import_tasks: tasks/user/flatpak_apps.yml
+      tags: [flatpak]
+
+    - name: Configure user services
+      ansible.builtin.import_tasks: tasks/user/services.yml
+      tags: [user_services]
