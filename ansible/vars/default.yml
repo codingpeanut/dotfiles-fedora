@@ -97,6 +97,7 @@ system_packages:
   - swappy
   - playerctl
   - pavucontrol
+  - libnotify
   - cava
   - tesseract
   - tesseract-langpack-eng

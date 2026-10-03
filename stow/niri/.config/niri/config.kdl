@@ -92,13 +92,51 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 // -----------------------------------------------------------------------------
 // Window Rules (Floating dialogs & utility popups)
 // -----------------------------------------------------------------------------
+// Volume Control (pavucontrol / org.pulseaudio.pavucontrol)
 window-rule {
-    match app-id=r#"^(pavucontrol|nm-connection-editor|blueman-manager|gnome-control-center|gnome-calendar|gnome-system-monitor)$"#
+    match app-id=r#"(?i)pavucontrol"#
     open-floating true
-    default-column-width { fixed 900; }
+    default-column-width { fixed 850; }
+    default-window-height { fixed 580; }
+}
+window-rule {
+    match title=r#"(?i)(Volume Control|音量控制)"#
+    open-floating true
+    default-column-width { fixed 850; }
+    default-window-height { fixed 580; }
+}
+
+// Calendar (gnome-calendar / org.gnome.Calendar)
+window-rule {
+    match app-id=r#"(?i)calendar"#
+    open-floating true
+    default-column-width { fixed 880; }
+    default-window-height { fixed 620; }
+}
+window-rule {
+    match title=r#"(?i)(Calendar|日曆|行事曆)"#
+    open-floating true
+    default-column-width { fixed 880; }
+    default-window-height { fixed 620; }
+}
+
+// Settings & Control Center (gnome-control-center / org.gnome.Settings)
+window-rule {
+    match app-id=r#"(?i)(settings|control-center)"#
+    open-floating true
+    default-column-width { fixed 960; }
+    default-window-height { fixed 640; }
+}
+
+// Network, Bluetooth & System utilities
+window-rule {
+    match app-id=r#"(?i)(nm-connection-editor|blueman|system-monitor|systemmonitor)"#
+    open-floating true
+    default-column-width { fixed 880; }
     default-window-height { fixed 600; }
 }
 
+// Generic floating terminal popups (btop, etc.)
 window-rule {
     match app-id="floating_window"
     open-floating true

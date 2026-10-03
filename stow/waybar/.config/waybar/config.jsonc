@@ -54,15 +54,15 @@
 
     "network": {
         "interval": 5,
-        "format-wifi": "{icon} {essid} ({signalStrength}%)",
+        "format-wifi": " {essid} ({signalStrength}%)",
         "format-ethernet": "󰈀 {ipaddr}",
         "tooltip-format": "󰈀 {ifname} via {gwaddr}",
-        "tooltip-format-wifi": " {essid} ({signalStrength}%)\n⇣ {bandwidthDownBytes}  ⇡ {bandwidthUpBytes}\nIP: {ipaddr}\nFrequency: {frequency}MHz\nInterface: {ifname}",
-        "tooltip-format-disconnected": "󰤮 Disconnected (Click to scan Wi-Fi)",
+        "tooltip-format-wifi": " {essid} ({signalStrength}%)\nIP: {ipaddr}\nInterface: {ifname}\n\n• 左鍵：彈出 Fuzzel Wi-Fi 選單\n• 中鍵：快速開關 Wi-Fi\n• 右鍵：開啟網路連線設定",
+        "tooltip-format-disconnected": "⚠ Disconnected\n\n• 左鍵：搜尋並連線 Wi-Fi",
         "format-linked": "󰈀 {ifname} (No IP)",
-        "format-disconnected": "󰤮 Disconnected",
-        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
-        "on-click": "kitty --class floating_window -e nmtui connect",
+        "format-disconnected": "⚠ Disconnected",
+        "on-click": "~/.config/waybar/scripts/wifi-menu.sh",
+        "on-click-middle": "bash -c \"nmcli radio wifi | grep -q 'enabled' && nmcli radio wifi off || nmcli radio wifi on\"",
         "on-click-right": "nm-connection-editor"
     },
 
