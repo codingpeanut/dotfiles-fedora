@@ -110,6 +110,17 @@ edit app="niri":
         *) echo "Unknown app: {{ app }}. Available: niri, waybar, kitty, fuzzel" ;; \
     esac
 
+# Check all desktop, CLI, and Wayland dependencies
+check:
+    @echo "==> Checking system dependencies..."
+    @for cmd in niri waybar kitty fuzzel mako btop nmtui nm-connection-editor nm-applet pavucontrol gnome-calendar swaylock swayidle brightnessctl playerctl wl-paste cliphist fcitx5; do \
+        if command -v "$$cmd" >/dev/null 2>&1; then \
+            printf "  [✓] %-24s found (%s)\n" "$$cmd" "$$(command -v "$$cmd")"; \
+        else \
+            printf "  [✗] %-24s NOT FOUND\n" "$$cmd"; \
+        fi \
+    done
+
 # Upgrade system packages and Flatpaks
 update:
     sudo dnf upgrade -y
