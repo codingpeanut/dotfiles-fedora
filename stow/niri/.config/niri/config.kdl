@@ -144,6 +144,14 @@ window-rule {
     default-window-height { fixed 640; }
 }
 
+// Interactive desktop popups (Wi-Fi, Volume, Bluetooth menus)
+window-rule {
+    match app-id="desktop_popup"
+    open-floating true
+    default-column-width { fixed 680; }
+    default-window-height { fixed 480; }
+}
+
 // -----------------------------------------------------------------------------
 // Keybindings
 // -----------------------------------------------------------------------------

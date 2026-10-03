@@ -59,6 +59,7 @@ window#waybar {
 #cpu:hover,
 #memory:hover,
 #network:hover,
+#bluetooth:hover,
 #pulseaudio:hover {
     background-color: rgba(65, 72, 104, 0.95);
     color: #ffffff;
@@ -83,6 +84,14 @@ window#waybar {
 
 #network.disconnected {
     color: #f7768e;
+}
+
+#bluetooth {
+    color: #7aa2f7;
+}
+
+#bluetooth.disabled {
+    color: #565f89;
 }
 
 #battery {

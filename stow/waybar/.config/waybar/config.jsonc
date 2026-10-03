@@ -7,7 +7,7 @@
     "margin-right": 10,
     "modules-left": ["niri/workspaces", "niri/window"],
     "modules-center": ["clock"],
-    "modules-right": ["pulseaudio", "network", "cpu", "memory", "battery", "tray"],
+    "modules-right": ["pulseaudio", "bluetooth", "network", "cpu", "memory", "battery", "tray"],
 
     "niri/workspaces": {
         "format": "{index}",
@@ -57,13 +57,23 @@
         "format-wifi": " {essid} ({signalStrength}%)",
         "format-ethernet": "󰈀 {ipaddr}",
         "tooltip-format": "󰈀 {ifname} via {gwaddr}",
-        "tooltip-format-wifi": " {essid} ({signalStrength}%)\nIP: {ipaddr}\nInterface: {ifname}\n\n• 左鍵：彈出 Fuzzel Wi-Fi 選單\n• 中鍵：快速開關 Wi-Fi\n• 右鍵：開啟網路連線設定",
+        "tooltip-format-wifi": " {essid} ({signalStrength}%)\nIP: {ipaddr}\nInterface: {ifname}\n\n• 左鍵：Wi-Fi 管理視窗\n• 中鍵：快速開關 Wi-Fi\n• 右鍵：開啟網路連線設定",
         "tooltip-format-disconnected": "⚠ Disconnected\n\n• 左鍵：搜尋並連線 Wi-Fi",
         "format-linked": "󰈀 {ifname} (No IP)",
         "format-disconnected": "⚠ Disconnected",
-        "on-click": "~/.config/waybar/scripts/wifi-menu.sh",
+        "on-click": "kitty --class desktop_popup --title 'Wi-Fi 連線管理' -o remember_window_size=no -o initial_window_width=680 -o initial_window_height=480 -o window_padding_width=10 bash ~/.config/waybar/scripts/wifi-menu.sh",
         "on-click-middle": "bash -c \"nmcli radio wifi | grep -q 'enabled' && nmcli radio wifi off || nmcli radio wifi on\"",
         "on-click-right": "nm-connection-editor"
+    },
+
+    "bluetooth": {
+        "format": "󰂯 {status}",
+        "format-disabled": "󰂲 Off",
+        "format-connected": "󰂱 {device_alias}",
+        "format-connected-battery": "󰂱 {device_alias} ({device_battery_percentage}%)",
+        "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} 個已連線裝置\n\n• 左鍵：藍芽裝置管理視窗\n• 右鍵：完整藍芽管理員",
+        "on-click": "kitty --class desktop_popup --title '藍芽裝置管理' -o remember_window_size=no -o initial_window_width=680 -o initial_window_height=480 -o window_padding_width=10 bash ~/.config/waybar/scripts/bluetooth-menu.sh",
+        "on-click-right": "blueman-manager"
     },
 
     "pulseaudio": {
@@ -72,6 +82,8 @@
         "format-icons": {
             "default": ["", "", ""]
         },
-        "on-click": "pavucontrol"
+        "tooltip-format": "{desc}\n音量: {volume}%\n\n• 左鍵：音量與輸出設備管理\n• 右鍵：完整混音器 (pavucontrol)",
+        "on-click": "kitty --class desktop_popup --title '音量調整' -o remember_window_size=no -o initial_window_width=680 -o initial_window_height=480 -o window_padding_width=10 bash ~/.config/waybar/scripts/volume-menu.sh",
+        "on-click-right": "pavucontrol"
     }
 }
