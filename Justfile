@@ -81,17 +81,27 @@ pull:
 
 # Reload running desktop components (Waybar, Mako)
 reload:
-    @echo "==> Reloading Waybar and Mako..."
-    @if pgrep -x waybar >/dev/null; then \
-        pkill -SIGUSR2 waybar; \
-    else \
-        waybar >/dev/null 2>&1 & \
-    fi
-    @if pgrep -x mako >/dev/null; then \
-        makoctl reload 2>/dev/null || true; \
-    else \
-        mako >/dev/null 2>&1 & \
-    fi
+    @echo "==> Restarting Waybar and Mako..."
+    @(killall waybar 2>/dev/null || true)
+    @sleep 0.3
+    @(nohup waybar >/dev/null 2>&1 &)
+    @(killall mako 2>/dev/null || true)
+    @(nohup mako >/dev/null 2>&1 &)
+
+# Install required desktop dependencies for Waybar buttons and utilities
+deps:
+    @echo "==> Installing desktop dependencies (Waybar, popups, audio, network, monitor)..."
+    sudo dnf install -y btop NetworkManager-tui nm-connection-editor network-manager-applet gnome-calendar pavucontrol waybar mako fuzzel kitty swaylock swayidle brightnessctl playerctl wl-clipboard cliphist
+
+# One-stop command to fix everything: pull, install dependencies, stow, restart bars, and verify
+fix:
+    @echo "==> Pulling latest changes from Git..."
+    @git pull --rebase --autostash || git reset --hard origin/main
+    @just deps
+    @just stow
+    @just reload
+    @just check
+    @echo "==> All dotfiles, dependencies, and Waybar/Mako have been fixed and reloaded!"
 
 # One-command commit & push local changes to GitHub
 push msg="chore: update dotfiles":
