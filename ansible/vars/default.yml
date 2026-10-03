@@ -106,6 +106,10 @@ system_packages:
   - qt6-qtsvg-devel
   - qt6-qtshadertools-devel
   - qt6-qtimageformats
+  - libqalculate-devel
+  - aubio-devel
+  - pipewire-devel
+  - libddcutil-devel
 
 # System services to enable and start (systemd system-level)
 system_services:
