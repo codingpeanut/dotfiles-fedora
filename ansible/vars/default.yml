@@ -6,6 +6,7 @@ system_copr_repos:
   - yalter/niri
   - errornointernet/quickshell
   - atim/starship
+  - celestelove/libcava
 
 # System RPM packages to install via DNF
 system_packages:
@@ -110,6 +111,7 @@ system_packages:
   - aubio-devel
   - pipewire-devel
   - libddcutil-devel
+  - libcava-devel
 
 # System services to enable and start (systemd system-level)
 system_services:
