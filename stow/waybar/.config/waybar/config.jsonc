@@ -7,7 +7,7 @@
     "margin-right": 10,
     "modules-left": ["niri/workspaces", "niri/window"],
     "modules-center": ["clock"],
-    "modules-right": ["pulseaudio", "network", "custom/bluetooth", "cpu", "memory", "battery", "tray"],
+    "modules-right": ["pulseaudio", "network", "bluetooth", "cpu", "memory", "battery", "tray"],
 
     "niri/workspaces": {
         "format": "{index}",
@@ -68,13 +68,21 @@
         "on-click-right": "nm-connection-editor"
     },
 
-    "custom/bluetooth": {
-        "format": "{}",
-        "return-type": "json",
-        "exec": "~/.config/waybar/scripts/bluetooth-status.sh",
-        "interval": 2,
+    "bluetooth": {
+        "format": "󰂯",
+        "format-disabled": "󰂲",
+        "format-off": "󰂲",
+        "format-on": "󰂯",
+        "format-connected": "󰂱 {device_alias}",
+        "format-connected-battery": "󰂱 {device_alias} ({device_battery_percentage}%)",
+        "format-no-controller": "󰂲",
+        "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} 個已連線裝置\n\n• 左鍵：開啟 Blueman 藍芽管理器\n• 中鍵：切換藍芽開關\n• 右鍵：開啟 Blueman 藍芽管理器",
+        "tooltip-format-disabled": "藍芽已關閉\n\n• 左鍵：開啟 Blueman 管理器\n• 中鍵：開啟藍芽",
+        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n已連線裝置:\n{device_enumerate}\n\n• 左鍵：開啟 Blueman 藍芽管理器\n• 中鍵：切換藍芽開關\n• 右鍵：開啟 Blueman 藍芽管理器",
+        "tooltip-format-enumerate-connected": "• {device_alias}\t{device_address}",
+        "tooltip-format-enumerate-connected-battery": "• {device_alias}\t{device_address} ({device_battery_percentage}%)",
         "on-click": "blueman-manager",
-        "on-click-middle": "bash -c \"bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on\"",
+        "on-click-middle": "bash -c \"bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || (rfkill unblock bluetooth 2>/dev/null; bluetoothctl power on)\"",
         "on-click-right": "blueman-manager"
     },
 
