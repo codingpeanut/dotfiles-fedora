@@ -31,14 +31,15 @@ except Exception:
     pass
 
 num_btns = 5
-gap = 24
-btn_size = max(140, min(220, int(h * 0.18)))
-total_w = num_btns * btn_size + (num_btns - 1) * gap
-total_h = btn_size
+gap = 18
+btn_w = 104
+btn_h = 116
+total_w = num_btns * btn_w + (num_btns - 1) * gap
+total_h = btn_h
 tb = max(20, (h - total_h) // 2)
 lr = max(20, (w - total_w) // 2)
 print(f'{tb} {lr} {gap}')
-" 2>/dev/null || echo "443 427 24")
+" 2>/dev/null || echo "482 664 18")
 
     exec wlogout -b 5 -c "$col_gap" -r 0 -T "$m_tb" -B "$m_tb" -L "$m_lr" -R "$m_lr" "$@"
 fi
