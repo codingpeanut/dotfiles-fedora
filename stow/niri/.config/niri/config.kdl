@@ -21,7 +21,7 @@ spawn-at-startup "mako"
 // Caelestia Shell (Quickshell adaptation - disabled for now)
 // spawn-at-startup "quickshell" "-c" "niri-caelestia-shell" "-n"
 
-spawn-at-startup "fcitx5" "-d"
+spawn-at-startup "fcitx5" "-d" "-r"
 // spawn-at-startup "blueman-applet"
 // spawn-at-startup "nm-applet" "--indicator"
 spawn-at-startup "swayidle" "-w" "timeout" "300" "swaylock -f" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors"
@@ -147,7 +147,7 @@ window-rule {
 
 // Wi-Fi & Network GUI (nmgui / com.network.manager)
 window-rule {
-    match app-id=r#"(?i)(com\.network\.manager|network-manager|nmgui)"#
+    match app-id=r#"(?i)(com\.network\.manager|network-manager|nmgui|main\.bin|main)"#
     open-floating true
     open-maximized false
     default-column-width { fixed 560; }
@@ -177,6 +177,20 @@ window-rule {
     default-column-width { fixed 960; }
     default-window-height { fixed 640; }
 }
+
+// Fcitx5 Input Method Candidate & Configuration Windows
+window-rule {
+    match app-id="fcitx" title="^Fcitx5 Input Window$"
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"(?i)org\.fcitx\.fcitx5-configtool"#
+    open-floating true
+    default-column-width { fixed 720; }
+    default-window-height { fixed 600; }
+}
+
 
 // -----------------------------------------------------------------------------
 // Keybindings
