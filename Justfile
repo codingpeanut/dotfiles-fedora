@@ -58,17 +58,17 @@ stow:
         mv "{{ home }}/.config/niri/config.kdl" "{{ home }}/.config/niri/config.kdl.bak"; \
     fi
     @cd stow && for pkg in */; do \
-        pkg_name="${pkg%/}"; \
-        echo "Stowing $pkg_name..."; \
-        stow -v -R -t "{{ home }}" "$pkg_name"; \
+        pkg_name="$${pkg%/}"; \
+        echo "Stowing $$pkg_name..."; \
+        stow -v -R -t "{{ home }}" "$$pkg_name"; \
     done
 
 # Remove Stow symlinks
 unstow:
     @echo "==> Unstowing all packages from {{ home }}..."
     @cd stow && for pkg in */; do \
-        pkg_name="${pkg%/}"; \
-        stow -v -D -t "{{ home }}" "$pkg_name"; \
+        pkg_name="$${pkg%/}"; \
+        stow -v -D -t "{{ home }}" "$$pkg_name"; \
     done
 
 # One-command sync: pull latest, auto-stow, and reload desktop bars
