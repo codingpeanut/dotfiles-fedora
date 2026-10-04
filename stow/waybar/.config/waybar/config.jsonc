@@ -102,6 +102,7 @@
         },
         "modules": [
             "custom/tray-toggle",
+            "custom/notification",
             "tray"
         ]
     },
@@ -109,6 +110,17 @@
     "custom/tray-toggle": {
         "format": "",
         "tooltip": false
+    },
+
+    "custom/notification": {
+        "format": "{}",
+        "return-type": "json",
+        "interval": 2,
+        "signal": 9,
+        "exec": "~/.config/waybar/scripts/notification-status.py",
+        "on-click": "notification-center",
+        "on-click-right": "bash -c 'makoctl mode | grep -q do-not-disturb && makoctl mode -r do-not-disturb || makoctl mode -a do-not-disturb; pkill -RTMIN+9 waybar'",
+        "on-click-middle": "bash -c 'makoctl dismiss -a; pkill mako; nohup mako >/dev/null 2>&1 &; pkill -RTMIN+9 waybar'"
     },
 
     "tray": {

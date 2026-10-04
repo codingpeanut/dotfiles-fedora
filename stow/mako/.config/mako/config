@@ -25,3 +25,8 @@ default-timeout=5000
 border-color=#f7768e
 default-timeout=0
 text-color=#f7768e
+
+max-history=50
+
+[mode=do-not-disturb]
+invisible=1
