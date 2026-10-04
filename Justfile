@@ -70,6 +70,8 @@ stow:
         echo "Stowing $pkg_name..."; \
         stow -v -R -t "{{ home }}" "$pkg_name"; \
     done
+    @mkdir -p "{{ home }}/.config/niri"
+    @ln -sf "$(pwd)/stow/niri/.config/niri/config.kdl" "{{ home }}/.config/niri/config.kdl"
 
 # Remove Stow symlinks
 unstow:

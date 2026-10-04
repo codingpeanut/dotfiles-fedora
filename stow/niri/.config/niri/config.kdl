@@ -131,16 +131,8 @@ window-rule {
 // Bluetooth Manager (blueman-manager / Bluetooth Devices / 藍牙裝置)
 window-rule {
     match app-id=r#"(?i)blueman"#
+    match title=r#"(?i)(bluetooth|藍牙|藍芽|blueman)"#
     open-floating true
-    open-maximized false
-    default-column-width { fixed 720; }
-    default-window-height { fixed 560; }
-}
-
-window-rule {
-    match title=r#"(?i)(bluetooth|藍牙|藍芽)"#
-    open-floating true
-    open-maximized false
     default-column-width { fixed 720; }
     default-window-height { fixed 560; }
 }
@@ -148,16 +140,8 @@ window-rule {
 // Wi-Fi & Network GUI (nmgui / com.network.manager)
 window-rule {
     match app-id=r#"(?i)(com\.network\.manager|network-manager|nmgui|main\.bin|main)"#
-    open-floating true
-    open-maximized false
-    default-column-width { fixed 560; }
-    default-window-height { fixed 620; }
-}
-
-window-rule {
     match title=r#"(?i)(Network Manager|NM GUI|nmgui|wi-fi manager)"#
     open-floating true
-    open-maximized false
     default-column-width { fixed 560; }
     default-window-height { fixed 620; }
 }
