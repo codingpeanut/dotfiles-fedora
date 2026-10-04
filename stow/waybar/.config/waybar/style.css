@@ -48,6 +48,7 @@ window#waybar {
 #bluetooth,
 #pulseaudio,
 #custom-tray-toggle,
+#custom-clipboard,
 #custom-notification,
 #tray {
     padding: 0 10px;
@@ -67,6 +68,7 @@ window#waybar {
 #bluetooth:hover,
 #pulseaudio:hover,
 #custom-tray-toggle:hover,
+#custom-clipboard:hover,
 #custom-notification:hover {
     background-color: rgba(65, 72, 104, 0.95);
     color: #ffffff;
@@ -164,6 +166,11 @@ window#waybar {
     color: #f7768e;
 }
 
+#custom-clipboard {
+    color: #e0af68;
+    padding: 0 8px;
+    font-size: 14px;
+}
 
 
 

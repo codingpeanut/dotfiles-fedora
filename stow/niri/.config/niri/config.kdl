@@ -358,6 +358,7 @@ binds {
     // Floating window layout
     Mod+V       { toggle-window-floating; }
     Mod+Shift+V { switch-focus-between-floating-and-tiling; }
+    Mod+Ctrl+V hotkey-overlay-title="Clipboard History: cliphist" { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
 
     // Tabbed column display
     Mod+W { toggle-column-tabbed-display; }

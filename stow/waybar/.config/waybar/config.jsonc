@@ -102,6 +102,7 @@
         },
         "modules": [
             "custom/tray-toggle",
+            "custom/clipboard",
             "custom/notification",
             "tray"
         ]
@@ -110,6 +111,14 @@
     "custom/tray-toggle": {
         "format": "",
         "tooltip": false
+    },
+
+    "custom/clipboard": {
+        "format": "󰅇",
+        "tooltip-format": "剪貼簿歷史 (cliphist)\n\n• 左鍵：開啟歷史選取器\n• 右鍵：清除所有歷史",
+        "on-click": "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy",
+        "on-click-right": "cliphist wipe",
+        "tooltip": true
     },
 
     "custom/notification": {
