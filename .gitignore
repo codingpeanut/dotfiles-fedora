@@ -8,5 +8,6 @@ ansible/vars/local.yml
 .DS_Store
 *.swp
 *~
-.idea/
-.vscode/
+# Python cache
+__pycache__/
+*.pyc

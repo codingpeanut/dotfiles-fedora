@@ -145,10 +145,17 @@ window-rule {
 }
 
 window-rule {
+    match app-id="wifi-manager"
+    open-floating true
+    default-column-width { fixed 560; }
+    default-window-height { fixed 620; }
+}
+
+window-rule {
     match title=r#"(?i)(wi-fi manager|bluetooth manager)"#
     open-floating true
-    default-column-width { fixed 960; }
-    default-window-height { fixed 640; }
+    default-column-width { fixed 560; }
+    default-window-height { fixed 620; }
 }
 
 // -----------------------------------------------------------------------------
