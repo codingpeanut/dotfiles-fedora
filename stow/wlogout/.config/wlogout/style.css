@@ -25,9 +25,16 @@ button {
     transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-button:focus,
-button:active,
-button:hover {
+button:focus {
+    outline-style: none;
+    box-shadow: none;
+    border-color: #24283b;
+    color: #c0caf5;
+    background-color: #1a1b26;
+}
+
+button:hover,
+button:active {
     background-color: #24283b;
     outline-style: none;
 }
@@ -36,9 +43,8 @@ button:hover {
     background-image: image(url("./icons/lock.svg"), url("/usr/share/wlogout/icons/lock.png"));
 }
 
-#lock:focus,
-#lock:active,
-#lock:hover {
+#lock:hover,
+#lock:active {
     border-color: #7aa2f7;
     color: #7aa2f7;
     box-shadow: 0 0 16px rgba(122, 162, 247, 0.35);
@@ -48,9 +54,8 @@ button:hover {
     background-image: image(url("./icons/suspend.svg"), url("/usr/share/wlogout/icons/suspend.png"));
 }
 
-#suspend:focus,
-#suspend:active,
-#suspend:hover {
+#suspend:hover,
+#suspend:active {
     border-color: #2ac3de;
     color: #2ac3de;
     box-shadow: 0 0 16px rgba(42, 195, 222, 0.35);
@@ -60,9 +65,8 @@ button:hover {
     background-image: image(url("./icons/logout.svg"), url("/usr/share/wlogout/icons/logout.png"));
 }
 
-#logout:focus,
-#logout:active,
-#logout:hover {
+#logout:hover,
+#logout:active {
     border-color: #bb9af7;
     color: #bb9af7;
     box-shadow: 0 0 16px rgba(187, 154, 247, 0.35);
@@ -72,9 +76,8 @@ button:hover {
     background-image: image(url("./icons/reboot.svg"), url("/usr/share/wlogout/icons/reboot.png"));
 }
 
-#reboot:focus,
-#reboot:active,
-#reboot:hover {
+#reboot:hover,
+#reboot:active {
     border-color: #e0af68;
     color: #e0af68;
     box-shadow: 0 0 16px rgba(224, 175, 104, 0.35);
@@ -84,9 +87,8 @@ button:hover {
     background-image: image(url("./icons/shutdown.svg"), url("/usr/share/wlogout/icons/shutdown.png"));
 }
 
-#shutdown:focus,
-#shutdown:active,
-#shutdown:hover {
+#shutdown:hover,
+#shutdown:active {
     border-color: #f7768e;
     color: #f7768e;
     box-shadow: 0 0 16px rgba(247, 118, 142, 0.4);
