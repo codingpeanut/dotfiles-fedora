@@ -219,7 +219,7 @@ binds {
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     Mod+O repeat=false { toggle-overview; }
 
-    Mod+Q repeat=false { close-window; }
+    Mod+Q repeat=false { spawn-sh "pkill wlogout 2>/dev/null || niri msg action close-window"; }
 
     // Focus navigation
     Mod+Left  { focus-column-left; }
