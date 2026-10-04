@@ -144,15 +144,16 @@ window-rule {
     default-window-height { fixed 640; }
 }
 
+// Wi-Fi & Network GUI (nmgui / com.network.manager)
 window-rule {
-    match app-id=r#"(?i)nmgui"#
+    match app-id=r#"(?i)(com\.network\.manager|network-manager|nmgui)"#
     open-floating true
     default-column-width { fixed 560; }
     default-window-height { fixed 620; }
 }
 
 window-rule {
-    match title=r#"(?i)(NM GUI|nmgui|wi-fi manager|bluetooth manager)"#
+    match title=r#"(?i)(Network Manager|NM GUI|nmgui|wi-fi manager|bluetooth manager)"#
     open-floating true
     default-column-width { fixed 560; }
     default-window-height { fixed 620; }
