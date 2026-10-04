@@ -1,0 +1,18 @@
+[Hotkey]
+# 切換輸入法（Trigger）: 左 Shift 鍵
+TriggerKeys=Lshift
+# 關閉輸入法（臨時直接輸入英文）
+EnumerateForwardKeys=
+EnumerateBackwardKeys=
+
+[Behavior]
+# 預設啟動時使用第一個輸入法（英文）
+DefaultInputMethod=keyboard-us
+ShareInputState=No
+ShowInputMethodInformation=True
+ShowInputMethodInformationWhenFocusIn=False
+CompactInputMethodInformation=True
+ShowFirstInputMethodInformation=True
+DefaultPageSize=5
+OverrideXkbOption=False
+PreloadInputMethod=True
