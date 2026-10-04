@@ -58,17 +58,17 @@ stow:
         mv "{{ home }}/.config/niri/config.kdl" "{{ home }}/.config/niri/config.kdl.bak"; \
     fi
     @cd stow && for pkg in */; do \
-        pkg_name="$${pkg%/}"; \
-        echo "Stowing $$pkg_name..."; \
-        stow -v -R -t "{{ home }}" "$$pkg_name"; \
+        pkg_name="${pkg%/}"; \
+        echo "Stowing $pkg_name..."; \
+        stow -v -R -t "{{ home }}" "$pkg_name"; \
     done
 
 # Remove Stow symlinks
 unstow:
     @echo "==> Unstowing all packages from {{ home }}..."
     @cd stow && for pkg in */; do \
-        pkg_name="$${pkg%/}"; \
-        stow -v -D -t "{{ home }}" "$$pkg_name"; \
+        pkg_name="${pkg%/}"; \
+        stow -v -D -t "{{ home }}" "$pkg_name"; \
     done
 
 # One-command sync: pull latest, auto-stow, and reload desktop bars
@@ -121,11 +121,11 @@ push msg="chore: update dotfiles":
 # Quick-edit specific configuration files
 edit app="niri":
     @case "{{ app }}" in \
-        niri) $${EDITOR:-nvim} stow/niri/.config/niri/config.kdl ;; \
-        waybar) $${EDITOR:-nvim} stow/waybar/.config/waybar/config.jsonc && pkill -SIGUSR2 waybar 2>/dev/null || true ;; \
-        kitty) $${EDITOR:-nvim} stow/kitty/.config/kitty/kitty.conf ;; \
-        fuzzel) $${EDITOR:-nvim} stow/fuzzel/.config/fuzzel/fuzzel.ini ;; \
-        wlogout) $${EDITOR:-nvim} stow/wlogout/.config/wlogout/layout ;; \
+        niri) ${EDITOR:-nvim} stow/niri/.config/niri/config.kdl ;; \
+        waybar) ${EDITOR:-nvim} stow/waybar/.config/waybar/config.jsonc && pkill -SIGUSR2 waybar 2>/dev/null || true ;; \
+        kitty) ${EDITOR:-nvim} stow/kitty/.config/kitty/kitty.conf ;; \
+        fuzzel) ${EDITOR:-nvim} stow/fuzzel/.config/fuzzel/fuzzel.ini ;; \
+        wlogout) ${EDITOR:-nvim} stow/wlogout/.config/wlogout/layout ;; \
         *) echo "Unknown app: {{ app }}. Available: niri, waybar, kitty, fuzzel, wlogout" ;; \
     esac
 
@@ -133,10 +133,10 @@ edit app="niri":
 check:
     @echo "==> Checking system dependencies..."
     @for cmd in niri waybar kitty fuzzel mako btop nmtui nm-connection-editor nm-applet gnome-control-center nmgui pavucontrol gnome-calendar swaylock swayidle brightnessctl playerctl wl-paste cliphist fcitx5 notify-send fzf blueman-manager wlogout; do \
-        if command -v "$$cmd" >/dev/null 2>&1; then \
-            printf "  [✓] %-24s found (%s)\n" "$$cmd" "$$(command -v "$$cmd")"; \
+        if command -v "$cmd" >/dev/null 2>&1; then \
+            printf "  [✓] %-24s found (%s)\n" "$cmd" "$(command -v "$cmd")"; \
         else \
-            printf "  [✗] %-24s NOT FOUND\n" "$$cmd"; \
+            printf "  [✗] %-24s NOT FOUND\n" "$cmd"; \
         fi \
     done
 
