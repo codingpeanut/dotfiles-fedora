@@ -7,7 +7,7 @@
     "margin-right": 10,
     "modules-left": ["niri/workspaces", "niri/window"],
     "modules-center": ["clock"],
-    "modules-right": ["pulseaudio", "network", "bluetooth", "cpu", "memory", "battery"],
+    "modules-right": ["pulseaudio", "network", "bluetooth", "cpu", "memory", "battery", "custom/fcitx5", "group/tray-drawer"],
 
     "niri/workspaces": {
         "format": "{index}",
@@ -55,12 +55,12 @@
         "format-wifi": "{icon} {essid} ({signalStrength}%)",
         "format-ethernet": "󰈀 {ipaddr}",
         "tooltip-format": "󰈀 {ifname} via {gwaddr}",
-        "tooltip-format-wifi": "{icon} {essid} ({signalStrength}%)\nIP: {ipaddr}\nInterface: {ifname}\n\n• 左鍵：開啟網路連線設定 (nm-connection-editor)\n• 中鍵：快速開關 Wi-Fi",
-        "tooltip-format-disconnected": "󰤮 Disconnected\n\n• 左鍵：開啟網路連線設定 (nm-connection-editor)",
+        "tooltip-format-wifi": "{icon} {essid} ({signalStrength}%)\nIP: {ipaddr}\nInterface: {ifname}\n\n• 左鍵：開啟 Wi-Fi 掃描與連線 (nmgui)\n• 中鍵：快速開關 Wi-Fi\n• 右鍵：開啟網路進階設定 (nm-connection-editor)",
+        "tooltip-format-disconnected": "󰤮 Disconnected\n\n• 左鍵：開啟 Wi-Fi 掃描與連線 (nmgui)",
         "format-linked": "󰈀 {ifname} (No IP)",
         "format-disconnected": "󰤮 Disconnected",
         "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
-        "on-click": "nm-connection-editor",
+        "on-click": "nmgui",
         "on-click-middle": "bash -c \"nmcli radio wifi | grep -q 'enabled' && nmcli radio wifi off || nmcli radio wifi on\"",
         "on-click-right": "nm-connection-editor"
     },
@@ -90,5 +90,40 @@
             "default": ["", "", ""]
         },
         "on-click": "pavucontrol"
+    },
+
+    "custom/fcitx5": {
+        "format": "{}",
+        "return-type": "json",
+        "interval": 1,
+        "signal": 8,
+        "exec": "~/.config/waybar/scripts/fcitx5-status.sh",
+        "on-click": "bash -c 'if [ $(fcitx5-remote 2>/dev/null || echo 0) -eq 0 ]; then fcitx5 -d; else fcitx5-remote -t; fi; pkill -RTMIN+8 waybar'",
+        "on-click-right": "fcitx5-configtool"
+    },
+
+    "group/tray-drawer": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 300,
+            "children-class": "tray-item",
+            "transition-left-to-right": false,
+            "click-to-reveal": true
+        },
+        "modules": [
+            "custom/tray-toggle",
+            "tray"
+        ]
+    },
+
+    "custom/tray-toggle": {
+        "format": "",
+        "tooltip": false
+    },
+
+    "tray": {
+        "icon-size": 16,
+        "spacing": 8
     }
 }
+

@@ -145,14 +145,14 @@ window-rule {
 }
 
 window-rule {
-    match app-id="wifi-manager"
+    match app-id=r#"(?i)nmgui"#
     open-floating true
     default-column-width { fixed 560; }
     default-window-height { fixed 620; }
 }
 
 window-rule {
-    match title=r#"(?i)(wi-fi manager|bluetooth manager)"#
+    match title=r#"(?i)(NM GUI|nmgui|wi-fi manager|bluetooth manager)"#
     open-floating true
     default-column-width { fixed 560; }
     default-window-height { fixed 620; }

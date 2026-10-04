@@ -92,8 +92,14 @@ reload:
 # Install required desktop dependencies for Waybar buttons and utilities
 deps:
     @echo "==> Installing desktop dependencies (Waybar, popups, audio, network, monitor, bluetooth, wlogout)..."
-    sudo dnf install -y btop NetworkManager-tui nm-connection-editor network-manager-applet gnome-calendar gnome-control-center pavucontrol waybar mako fuzzel kitty swaylock swayidle brightnessctl playerctl wl-clipboard cliphist libnotify fzf blueman bluez bluez-tools python3-dbus python3-gobject gtk3 wlogout
+    sudo dnf install -y btop NetworkManager-tui nm-connection-editor network-manager-applet gnome-calendar gnome-control-center pavucontrol waybar mako fuzzel kitty swaylock swayidle brightnessctl playerctl wl-clipboard cliphist libnotify fzf blueman bluez bluez-tools python3-dbus python3-gobject gtk3 gtk4 wlogout
     sudo systemctl enable --now bluetooth || true
+    @if ! command -v nmgui >/dev/null 2>&1 && [ ! -f "{{ home }}/.local/bin/nmgui" ]; then \
+        echo "==> Installing nmgui (GTK4 NetworkManager GUI) to {{ home }}/.local/bin/nmgui..."; \
+        mkdir -p "{{ home }}/.local/bin"; \
+        curl -sL https://github.com/s-adi-dev/nmgui/releases/download/v1.0.0/main.bin -o "{{ home }}/.local/bin/nmgui"; \
+        chmod +x "{{ home }}/.local/bin/nmgui"; \
+    fi
 
 # One-stop command to fix everything: pull, install dependencies, stow, restart bars, and verify
 fix:
@@ -126,7 +132,7 @@ edit app="niri":
 # Check all desktop, CLI, and Wayland dependencies
 check:
     @echo "==> Checking system dependencies..."
-    @for cmd in niri waybar kitty fuzzel mako btop nmtui nm-connection-editor nm-applet gnome-control-center pavucontrol gnome-calendar swaylock swayidle brightnessctl playerctl wl-paste cliphist fcitx5 notify-send fzf blueman-manager wlogout; do \
+    @for cmd in niri waybar kitty fuzzel mako btop nmtui nm-connection-editor nm-applet gnome-control-center nmgui pavucontrol gnome-calendar swaylock swayidle brightnessctl playerctl wl-paste cliphist fcitx5 notify-send fzf blueman-manager wlogout; do \
         if command -v "$$cmd" >/dev/null 2>&1; then \
             printf "  [✓] %-24s found (%s)\n" "$$cmd" "$$(command -v "$$cmd")"; \
         else \

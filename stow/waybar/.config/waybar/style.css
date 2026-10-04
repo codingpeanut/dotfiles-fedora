@@ -47,6 +47,8 @@ window#waybar {
 #custom-bluetooth,
 #bluetooth,
 #pulseaudio,
+#custom-fcitx5,
+#custom-tray-toggle,
 #tray {
     padding: 0 10px;
     margin: 4px 3px;
@@ -63,7 +65,9 @@ window#waybar {
 #network:hover,
 #custom-bluetooth:hover,
 #bluetooth:hover,
-#pulseaudio:hover {
+#pulseaudio:hover,
+#custom-fcitx5:hover,
+#custom-tray-toggle:hover {
     background-color: rgba(65, 72, 104, 0.95);
     color: #ffffff;
 }
@@ -137,6 +141,30 @@ window#waybar {
 #pulseaudio.muted {
     background-color: #414868;
     color: #f7768e;
+}
+
+#custom-fcitx5 {
+    color: #7aa2f7;
+    font-weight: 500;
+}
+
+#custom-fcitx5.active {
+    color: #bb9af7;
+    font-weight: bold;
+}
+
+#custom-fcitx5.inactive {
+    color: #9aa5ce;
+}
+
+#custom-fcitx5.off {
+    color: #565f89;
+}
+
+#custom-tray-toggle {
+    color: #7aa2f7;
+    padding: 0 8px;
+    font-size: 14px;
 }
 
 
