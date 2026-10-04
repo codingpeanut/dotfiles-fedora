@@ -56,14 +56,15 @@
 
     "network": {
         "interval": 5,
-        "format-wifi": " {essid} ({signalStrength}%)",
+        "format-wifi": "{icon} {essid} ({signalStrength}%)",
         "format-ethernet": "󰈀 {ipaddr}",
         "tooltip-format": "󰈀 {ifname} via {gwaddr}",
-        "tooltip-format-wifi": " {essid} ({signalStrength}%)\nIP: {ipaddr}\nInterface: {ifname}\n\n• 左鍵：開啟 Wi-Fi 浮動視窗 (Mod+Q 關閉)\n• 中鍵：快速開關 Wi-Fi\n• 右鍵：開啟網路連線設定",
-        "tooltip-format-disconnected": "⚠ Disconnected\n\n• 左鍵：開啟 Wi-Fi 浮動視窗",
+        "tooltip-format-wifi": "{icon} {essid} ({signalStrength}%)\nIP: {ipaddr}\nInterface: {ifname}\n\n• 左鍵：開啟 Wi-Fi GUI 設定視窗 (Mod+Q 關閉)\n• 中鍵：快速開關 Wi-Fi\n• 右鍵：開啟網路連線編輯器 (nm-connection-editor)",
+        "tooltip-format-disconnected": "󰤮 Disconnected\n\n• 左鍵：開啟 Wi-Fi GUI 設定視窗",
         "format-linked": "󰈀 {ifname} (No IP)",
-        "format-disconnected": "⚠ Disconnected",
-        "on-click": "kitty --class floating_window --title 'Wi-Fi Manager' -e ~/.config/waybar/scripts/wifi-menu.sh",
+        "format-disconnected": "󰤮 Disconnected",
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+        "on-click": "env XDG_CURRENT_DESKTOP=GNOME gnome-control-center wifi",
         "on-click-middle": "bash -c \"nmcli radio wifi | grep -q 'enabled' && nmcli radio wifi off || nmcli radio wifi on\"",
         "on-click-right": "nm-connection-editor"
     },
