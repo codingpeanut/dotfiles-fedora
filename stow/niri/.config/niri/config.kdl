@@ -162,6 +162,21 @@ window-rule {
     default-window-height { fixed 640; }
 }
 
+// Brightness Slider GUI & Menu Popups
+window-rule {
+    match app-id=r#"(?i)brightness-slider"#
+    open-floating true
+    default-column-width { fixed 460; }
+    default-window-height { fixed 190; }
+}
+
+window-rule {
+    match title=r#"(?i)(Brightness Menu|螢幕亮度調整)"#
+    open-floating true
+    default-column-width { fixed 460; }
+    default-window-height { fixed 190; }
+}
+
 // Fcitx5 Input Method Candidate & Configuration Windows
 window-rule {
     match app-id="fcitx" title="^Fcitx5 Input Window$"
@@ -191,6 +206,7 @@ binds {
     Mod+Space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Mod+E hotkey-overlay-title="File Manager: nautilus" { spawn "nautilus"; }
     Mod+N hotkey-overlay-title="Notification Center: fuzzel" { spawn "notification-center"; }
+    Mod+B hotkey-overlay-title="Brightness Slider: Graphical Popup" { spawn "brightness-menu"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+Shift+E hotkey-overlay-title="Session & Power Menu: wlogout" { spawn "power-menu"; }
     Ctrl+Alt+Delete hotkey-overlay-title="Session & Power Menu: wlogout" { spawn "power-menu"; }
@@ -212,9 +228,11 @@ binds {
     XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
     XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
 
-    // Brightness key mappings for brightnessctl.
-    XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+    // Brightness key mappings (brightness-control with OSD feedback).
+    XF86MonBrightnessUp   allow-when-locked=true { spawn-sh "brightness-control up 5"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn-sh "brightness-control down 5"; }
+    Mod+F6                allow-when-locked=true hotkey-overlay-title="Brightness: Increase (+5%)" { spawn-sh "brightness-control up 5"; }
+    Mod+F5                allow-when-locked=true hotkey-overlay-title="Brightness: Decrease (-5%)" { spawn-sh "brightness-control down 5"; }
 
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     Mod+O repeat=false { toggle-overview; }

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+if command -v python3 >/dev/null 2>&1 && [ -f "$HOME/.config/waybar/scripts/brightness-slider.py" ]; then
+    exec python3 "$HOME/.config/waybar/scripts/brightness-slider.py" "$@"
+else
+    exec "$HOME/.config/waybar/scripts/brightness-menu.sh" "$@"
+fi

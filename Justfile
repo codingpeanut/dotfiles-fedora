@@ -94,7 +94,7 @@ reload:
 # Install required desktop dependencies for Waybar buttons and utilities
 deps:
     @echo "==> Installing desktop dependencies (Waybar, popups, audio, network, monitor, bluetooth, wlogout)..."
-    sudo dnf install -y btop NetworkManager-tui nm-connection-editor network-manager-applet gnome-calendar gnome-control-center pavucontrol waybar mako fuzzel kitty swaylock swayidle brightnessctl playerctl wl-clipboard cliphist libnotify fzf blueman bluez bluez-tools python3-dbus python3-gobject gtk3 gtk4 wlogout fcitx5 fcitx5-chinese-addons fcitx5-chewing fcitx5-configtool fcitx5-gtk3 fcitx5-gtk4 fcitx5-qt5 fcitx5-qt6 imsettings
+    sudo dnf install -y btop NetworkManager-tui nm-connection-editor network-manager-applet gnome-calendar gnome-control-center pavucontrol waybar mako fuzzel kitty swaylock swayidle brightnessctl ddcutil playerctl wl-clipboard cliphist libnotify fzf blueman bluez bluez-tools python3-dbus python3-gobject gtk3 gtk4 wlogout fcitx5 fcitx5-chinese-addons fcitx5-chewing fcitx5-configtool fcitx5-gtk3 fcitx5-gtk4 fcitx5-qt5 fcitx5-qt6 imsettings
     sudo systemctl enable --now bluetooth || true
     @if command -v imsettings-switch >/dev/null 2>&1; then \
         echo "==> Setting default input method framework to fcitx5..."; \
@@ -138,7 +138,7 @@ edit app="niri":
 # Check all desktop, CLI, and Wayland dependencies
 check:
     @echo "==> Checking system dependencies..."
-    @for cmd in niri waybar kitty fuzzel mako btop nmtui nm-connection-editor nm-applet gnome-control-center nmgui pavucontrol gnome-calendar swaylock swayidle brightnessctl playerctl wl-paste cliphist fcitx5 notify-send fzf blueman-manager wlogout; do \
+    @for cmd in niri waybar kitty fuzzel mako btop nmtui nm-connection-editor nm-applet gnome-control-center nmgui pavucontrol gnome-calendar swaylock swayidle brightnessctl ddcutil playerctl wl-paste cliphist fcitx5 notify-send fzf blueman-manager wlogout; do \
         if command -v "$cmd" >/dev/null 2>&1; then \
             printf "  [✓] %-24s found (%s)\n" "$cmd" "$(command -v "$cmd")"; \
         else \

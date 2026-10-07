@@ -91,6 +91,7 @@ system_packages:
   - wl-clipboard
   - cliphist
   - brightnessctl
+  - ddcutil
   - swaylock
   - swayidle
   - wlogout

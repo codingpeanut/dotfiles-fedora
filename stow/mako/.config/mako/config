@@ -12,6 +12,7 @@ margin=10
 default-timeout=5000
 width=360
 height=150
+progress-color=over #7aa2f7
 
 [urgency=low]
 border-color=#414868

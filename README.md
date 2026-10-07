@@ -78,6 +78,7 @@ dotfiles-fedora/
   - 完整 FFmpeg、GStreamer 解碼器插件（H.264 / AAC / 硬體加速解碼）。
 - **桌面工具與周邊管理**：
   - **檔案總管**：Nautilus (GNOME Files) + File-Roller 壓縮管理（快捷鍵 `Mod + E`）。
+  - **螢幕亮度控制**：支援筆電背光 (`brightnessctl`) 與外接螢幕 (`ddcutil`)，整合 Waybar 頂部抽屜滑動條 (`backlight/slider`)、GTK3 現代化圖形滑桿彈出面板（快捷鍵 `Mod + B` 或指令 `brightness-menu`，含即時拖曳與 25%/50%/75%/100% 預設檔位）、Mako 進度條 OSD 即時反饋，並相容多媒體鍵與 `Mod + F5/F6`。
   - **藍牙連線**：Blueman 桌面托盤管理 + `bluetooth.service`。
   - **外觀風格**：GTK 暗色主題、Adwaita 游標自動統一。
 - **文字編輯器（雙連動）**：

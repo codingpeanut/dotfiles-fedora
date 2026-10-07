@@ -7,7 +7,7 @@
     "margin-right": 10,
     "modules-left": ["niri/workspaces", "niri/window"],
     "modules-center": ["clock"],
-    "modules-right": ["pulseaudio", "network", "bluetooth", "cpu", "memory", "battery", "group/tray-drawer"],
+    "modules-right": ["pulseaudio", "group/backlight-drawer", "network", "bluetooth", "cpu", "memory", "battery", "group/tray-drawer"],
 
     "niri/workspaces": {
         "format": "{index}",
@@ -45,9 +45,8 @@
         "format-charging": "󱐋 {capacity}%",
         "format-plugged": " {capacity}%",
         "format-icons": ["", "", "", "", ""],
-        "tooltip-format": "{timeTo}\n\n• 左鍵：開啟開關機選單 (wlogout)\n• 右鍵：開啟 GNOME 電源設定",
-        "on-click": "power-menu",
-        "on-click-right": "gnome-control-center power"
+        "tooltip-format": "{timeTo}\n\n• 點擊：開啟 GNOME 電源設定",
+        "on-click": "gnome-control-center power"
     },
 
     "network": {
@@ -92,6 +91,35 @@
         "on-click": "pavucontrol"
     },
 
+    "group/backlight-drawer": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 300,
+            "children-class": "backlight-slider-child",
+            "transition-left-to-right": true,
+            "click-to-reveal": false
+        },
+        "modules": [
+            "backlight",
+            "backlight/slider"
+        ]
+    },
+
+    "backlight": {
+        "format": "{icon} {percent}%",
+        "format-icons": ["󰃞", "󰃝", "󰃟", "󰃠"],
+        "on-scroll-up": "brightness-control up 5",
+        "on-scroll-down": "brightness-control down 5",
+        "on-click": "brightness-menu",
+        "tooltip-format": "螢幕亮度: {percent}%\n\n• 滑鼠移入：展開亮度滑動條 (Scroll bar)\n• 滾輪：增減亮度 (±5%)\n• 點擊：開啟圖形化滑桿面板"
+    },
+
+    "backlight/slider": {
+        "min": 1,
+        "max": 100,
+        "orientation": "horizontal"
+    },
+
     "group/tray-drawer": {
         "orientation": "inherit",
         "drawer": {
@@ -104,7 +132,8 @@
             "custom/tray-toggle",
             "custom/clipboard",
             "custom/notification",
-            "tray"
+            "tray",
+            "custom/power"
         ]
     },
 
@@ -135,6 +164,13 @@
     "tray": {
         "icon-size": 16,
         "spacing": 8
+    },
+
+    "custom/power": {
+        "format": "⏻",
+        "tooltip-format": "電源選單 (wlogout)\n\n• 左鍵：開啟開關機選單 (wlogout)\n• 右鍵：開啟 GNOME 電源設定",
+        "on-click": "power-menu",
+        "on-click-right": "gnome-control-center power"
     }
 }
 
