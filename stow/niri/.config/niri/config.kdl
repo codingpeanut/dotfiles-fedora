@@ -177,6 +177,21 @@ window-rule {
     default-window-height { fixed 190; }
 }
 
+// Volume Slider GUI & Menu Popups
+window-rule {
+    match app-id=r#"(?i)volume-slider"#
+    open-floating true
+    default-column-width { fixed 460; }
+    default-window-height { fixed 190; }
+}
+
+window-rule {
+    match title=r#"(?i)(Volume Menu|系統音量調整)"#
+    open-floating true
+    default-column-width { fixed 460; }
+    default-window-height { fixed 190; }
+}
+
 // Fcitx5 Input Method Candidate & Configuration Windows
 window-rule {
     match app-id="fcitx" title="^Fcitx5 Input Window$"
@@ -207,6 +222,7 @@ binds {
     Mod+E hotkey-overlay-title="File Manager: nautilus" { spawn "nautilus"; }
     Mod+N hotkey-overlay-title="Notification Center: fuzzel" { spawn "notification-center"; }
     Mod+B hotkey-overlay-title="Brightness Slider: Graphical Popup" { spawn "brightness-menu"; }
+    Mod+Alt+V hotkey-overlay-title="Volume Slider: Graphical Popup" { spawn "volume-menu"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+Shift+E hotkey-overlay-title="Session & Power Menu: wlogout" { spawn "power-menu"; }
     Ctrl+Alt+Delete hotkey-overlay-title="Session & Power Menu: wlogout" { spawn "power-menu"; }

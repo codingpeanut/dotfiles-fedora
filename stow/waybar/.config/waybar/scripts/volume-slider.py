@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 # ==============================================================================
-# brightness-slider.py - Modern GTK3 Graphical Brightness Slider Popup
-# Tokyo Night theme, real-time scroll/drag adjustment, presets & keyboard nav
+# volume-slider.py - Modern GTK3 Graphical Volume Slider Popup
+# Tokyo Night theme, real-time scroll/drag adjustment, presets & arrow key navigation
 # ==============================================================================
 import os
 import sys
 import subprocess
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-BRIGHTNESS_CONTROL = os.path.join(SCRIPT_DIR, "brightness-control.sh")
 
 # Fallback to TUI menu if GTK is unavailable
 try:
@@ -17,37 +16,66 @@ try:
     gi.require_version('Gdk', '3.0')
     from gi.repository import Gtk, Gdk, GLib
 except Exception:
-    tui_script = os.path.join(SCRIPT_DIR, "brightness-menu.sh")
+    tui_script = os.path.join(SCRIPT_DIR, "volume-menu.sh")
     if os.path.exists(tui_script):
         os.execv("/bin/bash", ["bash", tui_script] + sys.argv[1:])
     sys.exit(1)
 
-def get_brightness():
+def get_volume_info():
+    """Returns (volume_percent, is_muted)"""
     try:
-        cmd = [BRIGHTNESS_CONTROL, "get"] if os.path.exists(BRIGHTNESS_CONTROL) else ["brightness-control", "get"]
-        out = subprocess.check_output(cmd, text=True, stderr=subprocess.DEVNULL).strip()
-        return int(out)
+        if shutil_which("wpctl"):
+            out = subprocess.check_output(["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"], text=True, stderr=subprocess.DEVNULL).strip()
+            parts = out.split()
+            vol = int(float(parts[1]) * 100) if len(parts) >= 2 else 50
+            muted = "[MUTED]" in out
+            return vol, muted
+        elif shutil_which("pactl"):
+            out = subprocess.check_output(["pactl", "get-sink-volume", "@DEFAULT_SINK@"], text=True, stderr=subprocess.DEVNULL)
+            import re
+            m = re.search(r'(\d+)%', out)
+            vol = int(m.group(1)) if m else 50
+            mute_out = subprocess.check_output(["pactl", "get-sink-mute", "@DEFAULT_SINK@"], text=True, stderr=subprocess.DEVNULL)
+            muted = "yes" in mute_out
+            return vol, muted
     except Exception:
-        return 50
+        pass
+    return 50, False
 
-def set_brightness(val):
+def shutil_which(cmd):
+    import shutil
+    return shutil.which(cmd) is not None
+
+def set_volume(val):
+    target = max(0, min(150, int(val)))
     try:
-        cmd = [BRIGHTNESS_CONTROL, "set", str(int(val))] if os.path.exists(BRIGHTNESS_CONTROL) else ["brightness-control", "set", str(int(val))]
-        subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if shutil_which("wpctl"):
+            subprocess.run(["wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", f"{target / 100.0:.2f}"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        elif shutil_which("pactl"):
+            subprocess.run(["pactl", "set-sink-volume", "@DEFAULT_SINK@", f"{target}%"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except Exception:
         pass
 
-class BrightnessSliderWindow(Gtk.Window):
+def toggle_mute():
+    try:
+        if shutil_which("wpctl"):
+            subprocess.run(["wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        elif shutil_which("pactl"):
+            subprocess.run(["pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception:
+        pass
+
+class VolumeSliderWindow(Gtk.Window):
     def __init__(self):
-        super().__init__(title="螢幕亮度調整")
-        self.set_wmclass("brightness-slider", "brightness-slider")
-        self.set_role("brightness-slider")
+        super().__init__(title="系統音量調整")
+        self.set_wmclass("volume-slider", "volume-slider")
+        self.set_role("volume-slider")
         self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_default_size(440, 180)
+        self.set_default_size(440, 190)
         self.set_resizable(False)
 
         self.pending_apply_id = None
-        self.current_val = get_brightness()
+        self.current_vol, self.is_muted = get_volume_info()
 
         # Load Tokyo Night CSS
         self.apply_css()
@@ -64,24 +92,24 @@ class BrightnessSliderWindow(Gtk.Window):
         header_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         vbox.pack_start(header_box, False, False, 0)
 
-        icon_label = Gtk.Label(label="󰃠")
-        icon_label.get_style_context().add_class("title-icon")
-        header_box.pack_start(icon_label, False, False, 0)
+        self.icon_label = Gtk.Label(label="󰝟" if self.is_muted else "󰕾")
+        self.icon_label.get_style_context().add_class("title-icon")
+        header_box.pack_start(self.icon_label, False, False, 0)
 
-        title_label = Gtk.Label(label="螢幕亮度")
+        title_label = Gtk.Label(label="系統音量")
         title_label.get_style_context().add_class("title-label")
         header_box.pack_start(title_label, False, False, 0)
 
         header_box.pack_start(Gtk.Box(), True, True, 0)  # Spacer
 
-        self.pct_label = Gtk.Label(label=f"{self.current_val}%")
+        self.pct_label = Gtk.Label(label=f"靜音 ({self.current_vol}%)" if self.is_muted else f"{self.current_vol}%")
         self.pct_label.get_style_context().add_class("pct-label")
         header_box.pack_end(self.pct_label, False, False, 0)
 
         # Slider (Gtk.Scale)
         self.adj = Gtk.Adjustment(
-            value=self.current_val,
-            lower=1.0,
+            value=self.current_vol,
+            lower=0.0,
             upper=100.0,
             step_increment=1.0,
             page_increment=5.0,
@@ -101,19 +129,22 @@ class BrightnessSliderWindow(Gtk.Window):
         btn_box.set_homogeneous(True)
         vbox.pack_start(btn_box, False, False, 0)
 
-        presets = [("25%", 25), ("50%", 50), ("75%", 75), ("100%", 100)]
+        presets = [("靜音", "mute"), ("25%", 25), ("50%", 50), ("75%", 75), ("100%", 100)]
         for label, val in presets:
             btn = Gtk.Button(label=label)
             btn.get_style_context().add_class("preset-btn")
-            btn.connect("clicked", self.create_preset_handler(val))
+            if val == "mute":
+                btn.connect("clicked", self.on_mute_clicked)
+            else:
+                btn.connect("clicked", self.create_preset_handler(val))
             btn_box.pack_start(btn, True, True, 0)
 
         # Keyboard Navigation Hint Footer
-        hint_label = Gtk.Label(label="󰌌 方向鍵 [← / →] 微調游標  |  [Enter / Esc] 確定")
+        hint_label = Gtk.Label(label="󰌌 方向鍵 [← / →] 微調游標  |  [M] 靜音  |  [Enter / Esc] 確定")
         hint_label.get_style_context().add_class("hint-label")
         vbox.pack_start(hint_label, False, False, 0)
 
-        # Make scale grab focus by default so arrow keys immediately control the slider cursor
+        # Grab focus on slider so arrow keys work immediately
         self.scale.set_can_focus(True)
         GLib.idle_add(self.scale.grab_focus)
 
@@ -131,7 +162,7 @@ class BrightnessSliderWindow(Gtk.Window):
         .title-icon {
             font-family: "JetBrainsMono Nerd Font", monospace;
             font-size: 20px;
-            color: #e0af68;
+            color: #2ac3de;
         }
         .title-label {
             font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
@@ -143,7 +174,7 @@ class BrightnessSliderWindow(Gtk.Window):
             font-family: "JetBrainsMono Nerd Font", monospace;
             font-size: 22px;
             font-weight: bold;
-            color: #e0af68;
+            color: #2ac3de;
         }
         scale trough {
             min-height: 12px;
@@ -154,16 +185,16 @@ class BrightnessSliderWindow(Gtk.Window):
         scale highlight {
             min-height: 12px;
             border-radius: 6px;
-            background-color: #e0af68;
+            background-color: #2ac3de;
         }
         scale slider {
             min-width: 26px;
             min-height: 26px;
             margin: -7px 0;
             border-radius: 13px;
-            background-color: #ff9e64;
+            background-color: #7dcfff;
             border: 3px solid #1a1b26;
-            box-shadow: 0 0 6px rgba(255, 158, 100, 0.6);
+            box-shadow: 0 0 6px rgba(42, 195, 222, 0.6);
             background-image: none;
         }
         scale slider:focus, scale slider:hover {
@@ -204,16 +235,16 @@ class BrightnessSliderWindow(Gtk.Window):
     def on_slider_changed(self, scale):
         val = int(scale.get_value())
         self.pct_label.set_text(f"{val}%")
+        self.icon_label.set_text("󰕾")
 
-        # Debounce the system brightnessctl/ddcutil call (40ms)
         if self.pending_apply_id is not None:
             GLib.source_remove(self.pending_apply_id)
 
-        self.pending_apply_id = GLib.timeout_add(40, self.do_apply_brightness, val)
+        self.pending_apply_id = GLib.timeout_add(40, self.do_apply_volume, val)
 
-    def do_apply_brightness(self, val):
+    def do_apply_volume(self, val):
         self.pending_apply_id = None
-        set_brightness(val)
+        set_volume(val)
         return False
 
     def create_preset_handler(self, target_val):
@@ -221,21 +252,28 @@ class BrightnessSliderWindow(Gtk.Window):
             self.scale.set_value(target_val)
         return handler
 
+    def on_mute_clicked(self, button):
+        toggle_mute()
+        vol, muted = get_volume_info()
+        self.is_muted = muted
+        self.icon_label.set_text("󰝟" if muted else "󰕾")
+        self.pct_label.set_text(f"靜音 ({vol}%)" if muted else f"{vol}%")
+
     def on_scroll_event(self, widget, event):
         delta = 0
         if event.direction == Gdk.ScrollDirection.UP:
-            delta = -5
-        elif event.direction == Gdk.ScrollDirection.DOWN:
             delta = 5
+        elif event.direction == Gdk.ScrollDirection.DOWN:
+            delta = -5
         elif event.direction == Gdk.ScrollDirection.SMOOTH:
             _, dy = event.get_scroll_deltas()
             if dy < 0:
-                delta = -5
-            elif dy > 0:
                 delta = 5
+            elif dy > 0:
+                delta = -5
 
         if delta != 0:
-            new_val = max(1, min(100, self.scale.get_value() + delta))
+            new_val = max(0, min(100, self.scale.get_value() + delta))
             self.scale.set_value(new_val)
             return True
         return False
@@ -244,32 +282,34 @@ class BrightnessSliderWindow(Gtk.Window):
         keyval = event.keyval
         state = event.state
 
-        # Shift key enables 1% ultra-fine tuning; regular arrows do 2% or 5%
         step = 1 if (state & Gdk.ModifierType.SHIFT_MASK) else 5
 
         if keyval in (Gdk.KEY_Escape, Gdk.KEY_q, Gdk.KEY_Q, Gdk.KEY_Return, Gdk.KEY_KP_Enter, Gdk.KEY_space):
             self.close()
             return True
+        elif keyval in (Gdk.KEY_m, Gdk.KEY_M):
+            self.on_mute_clicked(None)
+            return True
         elif keyval in (Gdk.KEY_Left, Gdk.KEY_h, Gdk.KEY_H):
-            new_val = max(1, min(100, self.scale.get_value() - step))
+            new_val = max(0, min(100, self.scale.get_value() - step))
             self.scale.set_value(new_val)
             return True
         elif keyval in (Gdk.KEY_Right, Gdk.KEY_l, Gdk.KEY_L):
-            new_val = max(1, min(100, self.scale.get_value() + step))
+            new_val = max(0, min(100, self.scale.get_value() + step))
             self.scale.set_value(new_val)
             return True
         elif keyval in (Gdk.KEY_Down, Gdk.KEY_j, Gdk.KEY_J):
-            new_val = max(1, min(100, self.scale.get_value() - step))
+            new_val = max(0, min(100, self.scale.get_value() - step))
             self.scale.set_value(new_val)
             return True
         elif keyval in (Gdk.KEY_Up, Gdk.KEY_k, Gdk.KEY_K):
-            new_val = max(1, min(100, self.scale.get_value() + step))
+            new_val = max(0, min(100, self.scale.get_value() + step))
             self.scale.set_value(new_val)
             return True
         return False
 
 def main():
-    win = BrightnessSliderWindow()
+    win = VolumeSliderWindow()
     win.show_all()
     Gtk.main()
 
