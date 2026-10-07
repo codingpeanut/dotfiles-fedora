@@ -204,15 +204,15 @@ class BrightnessSliderWindow(Gtk.Window):
     def on_scroll_event(self, widget, event):
         delta = 0
         if event.direction == Gdk.ScrollDirection.UP:
-            delta = 5
-        elif event.direction == Gdk.ScrollDirection.DOWN:
             delta = -5
+        elif event.direction == Gdk.ScrollDirection.DOWN:
+            delta = 5
         elif event.direction == Gdk.ScrollDirection.SMOOTH:
             _, dy = event.get_scroll_deltas()
             if dy < 0:
-                delta = 5
-            elif dy > 0:
                 delta = -5
+            elif dy > 0:
+                delta = 5
 
         if delta != 0:
             new_val = max(1, min(100, self.scale.get_value() + delta))
