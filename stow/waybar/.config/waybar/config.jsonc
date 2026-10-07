@@ -7,7 +7,7 @@
     "margin-right": 10,
     "modules-left": ["niri/workspaces", "niri/window"],
     "modules-center": ["clock"],
-    "modules-right": ["pulseaudio", "group/backlight-drawer", "network", "bluetooth", "cpu", "memory", "battery", "group/tray-drawer"],
+    "modules-right": ["pulseaudio", "backlight", "network", "bluetooth", "cpu", "memory", "battery", "group/tray-drawer"],
 
     "niri/workspaces": {
         "format": "{index}",
@@ -109,10 +109,11 @@
     "backlight": {
         "format": "{icon} {percent}%",
         "format-icons": ["󰃞", "󰃝", "󰃟", "󰃠"],
-        "on-scroll-up": "brightness-control down 5",
-        "on-scroll-down": "brightness-control up 5",
-        "on-click-right": "brightness-menu",
-        "tooltip-format": "螢幕亮度: {percent}%\n\n• 左鍵點擊：展開 / 收合水平滑動條\n• 右鍵點擊：開啟圖形化滑桿面板\n• 滾輪：增減亮度 (±5%)"
+        "on-scroll-up": "brightness-control up 5",
+        "on-scroll-down": "brightness-control down 5",
+        "smooth-scrolling-threshold": 1.0,
+        "on-click": "brightness-menu",
+        "tooltip-format": "螢幕亮度: {percent}%\n\n• 游標懸停（Hover）：滑鼠滾輪（上/下）或觸控板雙指（右/左）即時調整\n• 點擊：開啟水平滑桿微調面板（支援方向鍵 ← / →）"
     },
 
     "backlight/slider": {
