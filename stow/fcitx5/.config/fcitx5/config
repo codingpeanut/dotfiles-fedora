@@ -1,9 +1,20 @@
 [Hotkey]
-# 切換輸入法（Trigger）: 左 Shift 鍵
-TriggerKeys=Lshift
-# 關閉輸入法（臨時直接輸入英文）
-EnumerateForwardKeys=
-EnumerateBackwardKeys=
+# 反覆按切換鍵時進行輪換
+EnumerateWithTriggerKeys=True
+# 觸發修飾鍵快捷鍵的時限 (毫秒)
+ModifierOnlyKeyTimeout=250
+
+# 主切換輸入法（TriggerKeys）: 左 Shift 鍵與 Ctrl+Space
+[Hotkey/TriggerKeys]
+0=Shift_L
+1=Control+space
+
+# 解除綁定「臨時切換輸入法」（AltTriggerKeys），避免與主切換熱鍵衝突
+[Hotkey/AltTriggerKeys]
+
+[Hotkey/EnumerateForwardKeys]
+
+[Hotkey/EnumerateBackwardKeys]
 
 [Behavior]
 # 預設啟動時使用第一個輸入法（英文）
