@@ -43,6 +43,8 @@ window#waybar {
 #battery,
 #cpu,
 #memory,
+#idle_inhibitor,
+#power-profiles-daemon,
 #network,
 #custom-bluetooth,
 #bluetooth,
@@ -65,6 +67,8 @@ window#waybar {
 #battery:hover,
 #cpu:hover,
 #memory:hover,
+#idle_inhibitor:hover,
+#power-profiles-daemon:hover,
 #network:hover,
 #custom-bluetooth:hover,
 #bluetooth:hover,
@@ -214,6 +218,34 @@ window#waybar {
     color: #f7768e;
     padding: 0 8px;
     font-size: 14px;
+}
+
+#idle_inhibitor {
+    color: #565f89;
+    padding: 0 10px;
+    font-size: 14px;
+}
+
+#idle_inhibitor.activated {
+    color: #f7768e;
+}
+
+#power-profiles-daemon {
+    color: #7aa2f7;
+    padding: 0 10px;
+    font-size: 14px;
+}
+
+#power-profiles-daemon.performance {
+    color: #f7768e;
+}
+
+#power-profiles-daemon.balanced {
+    color: #7aa2f7;
+}
+
+#power-profiles-daemon.power-saver {
+    color: #9ece6a;
 }
 
 

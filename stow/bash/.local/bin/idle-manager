@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-exec python3 "$HOME/.config/waybar/scripts/idle-manager.py" "$@"

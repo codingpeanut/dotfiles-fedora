@@ -7,7 +7,7 @@
     "margin-right": 10,
     "modules-left": ["niri/workspaces", "niri/window"],
     "modules-center": ["clock"],
-    "modules-right": ["pulseaudio", "backlight", "network", "bluetooth", "cpu", "memory", "battery", "group/tray-drawer"],
+    "modules-right": ["pulseaudio", "backlight", "network", "bluetooth", "cpu", "memory", "idle_inhibitor", "battery", "power-profiles-daemon", "group/tray-drawer"],
 
     "niri/workspaces": {
         "format": "{index}",
@@ -36,6 +36,17 @@
         "on-click": "kitty --class floating_window -e btop"
     },
 
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "󰅶",
+            "deactivated": "󰾪"
+        },
+        "tooltip": true,
+        "tooltip-format-activated": "防睡眠模式：已啟用 (保持螢幕常亮，不鎖屏不睡眠)\n\n• 點擊：恢復日常閒置自動睡眠",
+        "tooltip-format-deactivated": "防睡眠模式：已關閉 (依閒置規則自動鎖屏與睡眠)\n\n• 點擊：一鍵開啟常亮防睡眠"
+    },
+
     "battery": {
         "states": {
             "warning": 30,
@@ -45,9 +56,19 @@
         "format-charging": "󱐋 {capacity}%",
         "format-plugged": " {capacity}%",
         "format-icons": ["", "", "", "", ""],
-        "tooltip-format": "{timeTo}\n\n• 左鍵：開啟能源與睡眠管理面板\n• 右鍵：快速循環能源模式 (平衡 ⇄ 效能 ⇄ 省電)",
-        "on-click": "energy-menu",
-        "on-click-right": "power-profile cycle"
+        "tooltip-format": "{timeTo}"
+    },
+
+    "power-profiles-daemon": {
+        "format": "{icon}",
+        "tooltip-format": "能源模式：{profile}\n驅動程式：{driver}\n\n• 點擊：切換能源模式 (平衡 ⇄ 效能 ⇄ 省電)",
+        "tooltip": true,
+        "format-icons": {
+            "default": "󰾅",
+            "performance": "",
+            "balanced": "󰾅",
+            "power-saver": ""
+        }
     },
 
     "network": {

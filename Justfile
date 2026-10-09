@@ -92,8 +92,6 @@ reload:
     @(nohup mako >/dev/null 2>&1 &)
     @echo "==> Reloading Fcitx5 configuration..."
     @(fcitx5-remote -r 2>/dev/null || true)
-    @echo "==> Reloading Idle Manager (swayidle)..."
-    @(idle-manager reload 2>/dev/null || true)
 
 # Install required desktop dependencies for Waybar buttons and utilities
 deps:
