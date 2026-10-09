@@ -45,8 +45,8 @@
         "format-charging": "󱐋 {capacity}%",
         "format-plugged": " {capacity}%",
         "format-icons": ["", "", "", "", ""],
-        "tooltip-format": "{timeTo}\n\n• 點擊：開啟 GNOME 電源設定",
-        "on-click": "gnome-control-center power"
+        "tooltip-format": "{timeTo}\n\n• 點擊：切換能源模式 (平衡 ⇄ 效能 ⇄ 省電)",
+        "on-click": "power-profile cycle"
     },
 
     "network": {

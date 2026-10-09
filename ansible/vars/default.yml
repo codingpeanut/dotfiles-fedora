@@ -92,6 +92,7 @@ system_packages:
   - cliphist
   - brightnessctl
   - ddcutil
+  - power-profiles-daemon
   - swaylock
   - swayidle
   - wlogout
