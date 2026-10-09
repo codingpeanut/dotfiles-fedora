@@ -22,6 +22,7 @@ spawn-at-startup "mako"
 // spawn-at-startup "quickshell" "-c" "niri-caelestia-shell" "-n"
 
 spawn-at-startup "fcitx5" "-d" "-r"
+spawn-at-startup "fcitx5-watcher"
 // spawn-at-startup "blueman-applet"
 // spawn-at-startup "nm-applet" "--indicator"
 spawn-at-startup "swayidle" "-w" "timeout" "300" "swaylock -f" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors"

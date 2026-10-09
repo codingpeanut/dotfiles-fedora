@@ -1,0 +1,173 @@
+#!/usr/bin/env python3
+# ==============================================================================
+# fcitx5-watcher - Real-time auto-reload daemon for Fcitx5 configuration changes
+# Watches ~/.config/fcitx5 and dotfiles repository using native Linux inotify.
+# Zero third-party dependencies.
+# ==============================================================================
+import ctypes
+import fcntl
+import os
+import select
+import signal
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+# Linux inotify syscall constants
+IN_CLOSE_WRITE = 0x00000008
+IN_MOVED_TO = 0x00000080
+IN_CREATE = 0x00000100
+IN_CLOEXEC = 0x00080000
+
+libc = ctypes.CDLL(None)
+inotify_init = libc.inotify_init1
+inotify_init.restype = ctypes.c_int
+inotify_init.argtypes = [ctypes.c_int]
+
+inotify_add_watch = libc.inotify_add_watch
+inotify_add_watch.restype = ctypes.c_int
+inotify_add_watch.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_uint32]
+
+
+def acquire_single_instance_lock():
+    lock_path = Path("/tmp/fcitx5-watcher.lock")
+    try:
+        lock_file = open(lock_path, "w")
+        fcntl.flock(lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        # Keep lock_file reference open for lifetime of process
+        return lock_file
+    except BlockingIOError:
+        sys.exit(0)
+    except Exception:
+        return None
+
+
+def reload_fcitx5():
+    # 1. Try fcitx5-remote -r (fastest and cleanest DBus reload)
+    try:
+        res = subprocess.run(
+            ["fcitx5-remote", "-r"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            timeout=2,
+        )
+        if res.returncode == 0:
+            notify_reload_success()
+            return
+    except Exception:
+        pass
+
+    # 2. Fallback to fcitx5 -d -r (restart daemon in background)
+    try:
+        subprocess.run(
+            ["fcitx5", "-d", "-r"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            timeout=3,
+        )
+        notify_reload_success()
+    except Exception:
+        pass
+
+
+def notify_reload_success():
+    try:
+        subprocess.run(
+            [
+                "notify-send",
+                "-u",
+                "low",
+                "-i",
+                "fcitx",
+                "-h",
+                "string:x-canonical-private-synchronous:fcitx5-reload",
+                "Fcitx5 輸入法",
+                "設定已更新並即時生效",
+            ],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            timeout=2,
+        )
+    except Exception:
+        pass
+
+
+def get_target_directories():
+    home = Path.home()
+    candidates = [
+        home / ".config" / "fcitx5",
+        home / ".config" / "fcitx5" / "conf",
+        home / "dev" / "dotfiles-fedora" / "stow" / "fcitx5" / ".config" / "fcitx5",
+        home / "dev" / "dotfiles-fedora" / "stow" / "fcitx5" / ".config" / "fcitx5" / "conf",
+    ]
+    return [p for p in candidates if p.exists() and p.is_dir()]
+
+
+def main():
+    lock = acquire_single_instance_lock()
+    if not lock:
+        sys.exit(0)
+
+    # Clean signal handling
+    def sig_handler(signum, frame):
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, sig_handler)
+    signal.signal(signal.SIGTERM, sig_handler)
+
+    fd = inotify_init(IN_CLOEXEC)
+    if fd < 0:
+        sys.exit(1)
+
+    mask = IN_CLOSE_WRITE | IN_MOVED_TO | IN_CREATE
+    watched_paths = {}
+
+    def update_watches():
+        for d in get_target_directories():
+            path_str = str(d.resolve())
+            if path_str not in watched_paths:
+                wd = inotify_add_watch(fd, path_str.encode("utf-8"), mask)
+                if wd >= 0:
+                    watched_paths[path_str] = wd
+
+    update_watches()
+
+    # Main event loop
+    while True:
+        # Check if new directories became available if list is empty
+        if not watched_paths:
+            time.sleep(3)
+            update_watches()
+            continue
+
+        # Wait for file system events with a 5-second timeout to re-check directory existence
+        r, _, _ = select.select([fd], [], [], 5.0)
+        if not r:
+            update_watches()
+            continue
+
+        try:
+            # Read inotify event data
+            os.read(fd, 8192)
+
+            # Debounce: wait 300ms for editor file writes to complete
+            time.sleep(0.3)
+
+            # Drain any remaining events generated during the write
+            while True:
+                dr, _, _ = select.select([fd], [], [], 0.05)
+                if dr:
+                    os.read(fd, 8192)
+                else:
+                    break
+
+            # Trigger Fcitx5 reload
+            reload_fcitx5()
+
+        except Exception:
+            time.sleep(1)
+
+
+if __name__ == "__main__":
+    main()

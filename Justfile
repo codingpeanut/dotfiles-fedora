@@ -57,10 +57,6 @@ stow:
         echo "Backing up existing regular ~/.config/niri/config.kdl to ~/.config/niri/config.kdl.bak..."; \
         mv "{{ home }}/.config/niri/config.kdl" "{{ home }}/.config/niri/config.kdl.bak"; \
     fi
-    @if [ ! -L "{{ home }}/.config/fcitx5" ] && [ -d "{{ home }}/.config/fcitx5" ] && [ ! -L "{{ home }}/.config/fcitx5/config" ]; then \
-        echo "Backing up existing regular ~/.config/fcitx5 to ~/.config/fcitx5.bak..."; \
-        mv "{{ home }}/.config/fcitx5" "{{ home }}/.config/fcitx5.bak"; \
-    fi
     @cd stow && for pkg in */; do \
         pkg_name="${pkg%/}"; \
         echo "Stowing $pkg_name..."; \
@@ -83,19 +79,6 @@ pull:
     @just reload
     @echo "==> All dotfiles synced, stowed, and reloaded successfully!"
 
-# Apply fcitx5 configuration immediately and reload running daemon
-fcitx:
-    @echo "==> Stowing Fcitx5 dotfiles into {{ home }}..."
-    @if [ ! -L "{{ home }}/.config/fcitx5" ] && [ -d "{{ home }}/.config/fcitx5" ] && [ ! -L "{{ home }}/.config/fcitx5/config" ]; then \
-        echo "Backing up existing regular ~/.config/fcitx5 to ~/.config/fcitx5.bak..."; \
-        mv "{{ home }}/.config/fcitx5" "{{ home }}/.config/fcitx5.bak"; \
-    fi
-    @mkdir -p "{{ home }}/.config"
-    @stow -v -R -d stow -t "{{ home }}" fcitx5 2>/dev/null || ln -sfn "$(pwd)/stow/fcitx5/.config/fcitx5" "{{ home }}/.config/fcitx5"
-    @echo "==> Reloading Fcitx5 daemon..."
-    @(fcitx5-remote -r 2>/dev/null || fcitx5 -r -d 2>/dev/null || true)
-    @echo "==> Fcitx5 configuration applied and reloaded successfully!"
-
 # Reload running desktop components (Niri, Waybar, Mako, Fcitx5)
 reload:
     @echo "==> Reloading Niri compositor configuration..."
@@ -108,7 +91,7 @@ reload:
     @(killall mako 2>/dev/null || true)
     @(nohup mako >/dev/null 2>&1 &)
     @echo "==> Reloading Fcitx5 configuration..."
-    @(fcitx5-remote -r 2>/dev/null || fcitx5 -r -d 2>/dev/null || true)
+    @(fcitx5-remote -r 2>/dev/null || true)
 
 # Install required desktop dependencies for Waybar buttons and utilities
 deps:
@@ -151,7 +134,8 @@ edit app="niri":
         kitty) ${EDITOR:-nvim} stow/kitty/.config/kitty/kitty.conf ;; \
         fuzzel) ${EDITOR:-nvim} stow/fuzzel/.config/fuzzel/fuzzel.ini ;; \
         wlogout) ${EDITOR:-nvim} stow/wlogout/.config/wlogout/layout ;; \
-        *) echo "Unknown app: {{ app }}. Available: niri, waybar, kitty, fuzzel, wlogout" ;; \
+        fcitx5) ${EDITOR:-nvim} stow/fcitx5/.config/fcitx5/config && (fcitx5-remote -r 2>/dev/null || true) ;; \
+        *) echo "Unknown app: {{ app }}. Available: niri, waybar, kitty, fuzzel, wlogout, fcitx5" ;; \
     esac
 
 # Check all desktop, CLI, and Wayland dependencies
