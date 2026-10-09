@@ -102,15 +102,57 @@ adjust_brightness() {
     send_notification "$current_pct"
 }
 
+is_touchpad_natural_scroll_enabled() {
+    local config="${HOME}/.config/niri/config.kdl"
+    if [[ ! -f "$config" ]]; then
+        config="${HOME}/dev/dotfiles-fedora/stow/niri/.config/niri/config.kdl"
+    fi
+    if [[ -f "$config" ]]; then
+        if awk '
+            /touchpad[[:space:]]*\{/ { in_touchpad=1; next }
+            in_touchpad && /\}/ { in_touchpad=0 }
+            in_touchpad && /^[[:space:]]*natural-scroll([[:space:]]|$)/ { found=1 }
+            END { exit(found ? 0 : 1) }
+        ' "$config"; then
+            return 0
+        else
+            return 1
+        fi
+    fi
+    # Default fallback to true for Niri dotfiles
+    return 0
+}
+
 action="${1:-notify}"
 case "$action" in
-    up)
+    up|scroll-up)
         step="${2:-5}"
         adjust_brightness up "$step"
         ;;
-    down)
+    down|scroll-down)
         step="${2:-5}"
         adjust_brightness down "$step"
+        ;;
+    scroll-left)
+        # Touchpad swipe direction adapts to natural-scroll:
+        # Natural scroll ON:  physical swipe right -> emits GDK_SCROLL_LEFT -> increase (+step)
+        # Natural scroll OFF: physical swipe left  -> emits GDK_SCROLL_LEFT -> decrease (-step)
+        step="${2:-5}"
+        if is_touchpad_natural_scroll_enabled; then
+            adjust_brightness up "$step"
+        else
+            adjust_brightness down "$step"
+        fi
+        ;;
+    scroll-right)
+        # Natural scroll ON:  physical swipe left  -> emits GDK_SCROLL_RIGHT -> decrease (-step)
+        # Natural scroll OFF: physical swipe right -> emits GDK_SCROLL_RIGHT -> increase (+step)
+        step="${2:-5}"
+        if is_touchpad_natural_scroll_enabled; then
+            adjust_brightness down "$step"
+        else
+            adjust_brightness up "$step"
+        fi
         ;;
     set)
         target="${2:-50}"
@@ -127,7 +169,8 @@ case "$action" in
         send_notification "$current_pct"
         ;;
     *)
-        echo "Usage: $0 {up [step]|down [step]|set <1-100>|get|notify}"
+        echo "Usage: $0 {up [step]|down [step]|scroll-left [step]|scroll-right [step]|set <1-100>|get|notify}"
         exit 1
         ;;
 esac
+

@@ -65,6 +65,34 @@ def toggle_mute():
     except Exception:
         pass
 
+def is_niri_touchpad_natural_scroll():
+    """Check if natural-scroll is enabled in ~/.config/niri/config.kdl under touchpad block."""
+    candidates = [
+        os.path.expanduser("~/.config/niri/config.kdl"),
+        os.path.expanduser("~/dev/dotfiles-fedora/stow/niri/.config/niri/config.kdl"),
+    ]
+    for config_path in candidates:
+        if os.path.exists(config_path):
+            try:
+                with open(config_path, "r", encoding="utf-8") as f:
+                    in_touchpad = False
+                    for line in f:
+                        stripped = line.strip()
+                        if stripped.startswith("//"):
+                            continue
+                        if "touchpad" in stripped and "{" in stripped:
+                            in_touchpad = True
+                            continue
+                        if in_touchpad:
+                            if "}" in stripped:
+                                in_touchpad = False
+                            elif stripped.startswith("natural-scroll"):
+                                return True
+                    return False
+            except Exception:
+                pass
+    return True
+
 class VolumeSliderWindow(Gtk.Window):
     def __init__(self):
         super().__init__(title="系統音量調整")
@@ -260,17 +288,59 @@ class VolumeSliderWindow(Gtk.Window):
         self.pct_label.set_text(f"靜音 ({vol}%)" if muted else f"{vol}%")
 
     def on_scroll_event(self, widget, event):
+        natural_scroll = is_niri_touchpad_natural_scroll()
         delta = 0
-        if event.direction in (Gdk.ScrollDirection.UP, Gdk.ScrollDirection.RIGHT):
+
+        if event.direction == Gdk.ScrollDirection.SMOOTH:
+            deltas = event.get_scroll_deltas()
+            if len(deltas) == 3:
+                _, dx, dy = deltas
+            else:
+                dx, dy = deltas
+
+            # Determine whether horizontal swipe (touchpad) or vertical scroll (mouse wheel / touchpad)
+            if abs(dx) > abs(dy):
+                # Horizontal swipe: 觸控板左右滑動
+                # 需求：往右變大 (+5)，往左變小 (-5)
+                # 自然捲動 (natural-scroll) 開啟時：向右滑動產生 dx < 0
+                # 自然捲動關閉時：向右滑動產生 dx > 0
+                if natural_scroll:
+                    if dx < 0:
+                        delta = 5
+                    elif dx > 0:
+                        delta = -5
+                else:
+                    if dx > 0:
+                        delta = 5
+                    elif dx < 0:
+                        delta = -5
+            else:
+                # Vertical scroll: 滑鼠滾輪上下滾動
+                # 需求：滾輪上是調大 (+5)，下是調小 (-5)
+                is_touchpad = False
+                source_dev = event.get_source_device()
+                if source_dev and source_dev.get_source() == Gdk.InputSource.TOUCHPAD:
+                    is_touchpad = True
+
+                if is_touchpad and natural_scroll:
+                    if dy > 0:
+                        delta = 5
+                    elif dy < 0:
+                        delta = -5
+                else:
+                    if dy < 0:
+                        delta = 5
+                    elif dy > 0:
+                        delta = -5
+
+        elif event.direction == Gdk.ScrollDirection.UP:
             delta = 5
-        elif event.direction in (Gdk.ScrollDirection.DOWN, Gdk.ScrollDirection.LEFT):
+        elif event.direction == Gdk.ScrollDirection.DOWN:
             delta = -5
-        elif event.direction == Gdk.ScrollDirection.SMOOTH:
-            dx, dy = event.get_scroll_deltas()
-            if dx > 0 or dy < 0:
-                delta = 5
-            elif dx < 0 or dy > 0:
-                delta = -5
+        elif event.direction == Gdk.ScrollDirection.RIGHT:
+            delta = -5 if natural_scroll else 5
+        elif event.direction == Gdk.ScrollDirection.LEFT:
+            delta = 5 if natural_scroll else -5
 
         if delta != 0:
             new_val = max(0, min(100, self.scale.get_value() + delta))

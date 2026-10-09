@@ -111,6 +111,8 @@
         "format-icons": ["󰃞", "󰃝", "󰃟", "󰃠"],
         "on-scroll-up": "brightness-control up 5",
         "on-scroll-down": "brightness-control down 5",
+        "on-scroll-left": "brightness-control scroll-left 5",
+        "on-scroll-right": "brightness-control scroll-right 5",
         "smooth-scrolling-threshold": 1.0,
         "on-click": "brightness-menu",
         "tooltip-format": "螢幕亮度: {percent}%\n\n• 游標懸停（Hover）：滑鼠滾輪（上/下）或觸控板雙指（右/左）即時調整\n• 點擊：開啟水平滑桿微調面板（支援方向鍵 ← / →）"
