@@ -163,6 +163,16 @@ window-rule {
     default-window-height { fixed 640; }
 }
 
+// Power & Battery Statistics (gnome-power-statistics / org.gnome.PowerStats)
+window-rule {
+    match app-id=r#"(?i)(org\.gnome\.PowerStats|gnome-power-statistics)"#
+    match title=r#"(?i)(Power Statistics|電池統計|電源統計)"#
+    open-floating true
+    default-column-width { fixed 800; }
+    default-window-height { fixed 560; }
+}
+
+
 // Brightness Slider GUI & Menu Popups
 window-rule {
     match app-id=r#"(?i)brightness-slider"#

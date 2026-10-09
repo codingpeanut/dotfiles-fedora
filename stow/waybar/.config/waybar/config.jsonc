@@ -56,7 +56,8 @@
         "format-charging": "󱐋 {capacity}%",
         "format-plugged": " {capacity}%",
         "format-icons": ["", "", "", "", ""],
-        "tooltip-format": "{timeTo}"
+        "tooltip-format": "{timeTo}\n\n• 點擊：開啟電池統計與健康度分析 (gnome-power-statistics)",
+        "on-click": "gnome-power-statistics"
     },
 
     "power-profiles-daemon": {

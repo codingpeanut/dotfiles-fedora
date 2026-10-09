@@ -79,7 +79,7 @@ dotfiles-fedora/
   - 完整 FFmpeg、GStreamer 解碼器插件（H.264 / AAC / 硬體加速解碼）。
 - **桌面工具與周邊管理**：
   - **檔案總管**：Nautilus (GNOME Files) + File-Roller 壓縮管理（快捷鍵 `Mod + E`）。
-  - **能源與睡眠管理（Wayland 原生組件）**：採用 Waybar 原生 `power-profiles-daemon` 模組（D-Bus 直連 `tuned-ppd`，點擊即時循環切換效能  / 平衡 󰾅 / 省電 ）、Waybar 原生 `idle_inhibitor` 咖啡杯模組（點擊一鍵切換防睡眠常亮模式）、標準 `swayidle` 閒置管理（5分鐘鎖定、10分鐘關螢幕、20分鐘休眠暫停）。
+  - **能源與睡眠管理（Wayland 原生組件）**：採用 Waybar 原生 `power-profiles-daemon` 模組（D-Bus 直連 `tuned-ppd`，點擊即時循環切換效能  / 平衡 󰾅 / 省電 ）、Waybar 原生 `idle_inhibitor` 咖啡杯模組（點擊一鍵切換防睡眠常亮模式）、標準 `swayidle` 閒置管理（5分鐘鎖定、10分鐘關螢幕、20分鐘休眠暫停），點擊電池圖示可開啟 `gnome-power-statistics` 檢視電池健康度、瓦數與充放電曲線。
   - **螢幕亮度控制**：支援筆電背光 (`brightnessctl`) 與外接螢幕 (`ddcutil`)，整合 Waybar 頂部抽屜滑動條 (`backlight/slider`)、GTK3 現代化圖形滑桿彈出面板（快捷鍵 `Mod + B` 或指令 `brightness-menu`，含即時拖曳與 25%/50%/75%/100% 預設檔位）、Mako 進度條 OSD 即時反饋，並相容多媒體鍵與 `Mod + F5/F6`。
   - **藍牙連線**：Blueman 桌面托盤管理 + `bluetooth.service`。
   - **外觀風格**：GTK 暗色主題、Adwaita 游標自動統一。
