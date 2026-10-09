@@ -30,6 +30,16 @@
     cmd: "mv {{ ansible_facts['user_dir'] | default(lookup('env', 'HOME')) }}/.vimrc {{ ansible_facts['user_dir'] | default(lookup('env', 'HOME')) }}/.vimrc.bak"
   when: vimrc_stat.stat.exists and not vimrc_stat.stat.islnk
 
+- name: Check if ~/.config/fcitx5 is a regular directory (not a symlink)
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['user_dir'] | default(lookup('env', 'HOME')) }}/.config/fcitx5"
+  register: fcitx5_stat
+
+- name: Backup existing regular ~/.config/fcitx5 before stowing
+  ansible.builtin.command:
+    cmd: "mv {{ ansible_facts['user_dir'] | default(lookup('env', 'HOME')) }}/.config/fcitx5 {{ ansible_facts['user_dir'] | default(lookup('env', 'HOME')) }}/.config/fcitx5.bak"
+  when: fcitx5_stat.stat.exists and not fcitx5_stat.stat.islnk
+
 - name: Apply dotfiles symlinks using GNU Stow
   ansible.builtin.command:
     cmd: "stow -v -R -d {{ playbook_dir }}/../stow -t {{ ansible_facts['user_dir'] | default(lookup('env', 'HOME')) }} {{ item }}"
