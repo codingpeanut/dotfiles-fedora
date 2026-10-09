@@ -157,36 +157,3 @@ update:
 status:
     @echo "==> Git status:"
     @git status -s
-
-# Build and install Niri-Caelestia Shell QML modules
-caelestia:
-    @rm -rf *HOME 2>/dev/null || true
-    @if [ ! -d "{{ home }}/.config/quickshell/niri-caelestia-shell" ]; then \
-        echo "==> Cloning Niri-Caelestia Shell repository..."; \
-        git clone https://github.com/Ayushkr2003/niri-caelestia-shell.git "{{ home }}/.config/quickshell/niri-caelestia-shell"; \
-    fi
-    @echo "==> Ensuring required Qt6, Caelestia and libcava dependencies are installed..."
-    sudo dnf copr enable -y celestelove/libcava || true
-    sudo dnf install -y qt6-qtmultimedia-devel qt6-qtwayland-devel qt6-qtsvg-devel qt6-qtshadertools-devel qt6-qt5compat qt6-qt5compat-devel libqalculate-devel aubio-devel pipewire-devel libddcutil-devel libcava-devel
-    @echo "==> Building and installing Niri-Caelestia Shell..."
-    cd "{{ home }}/.config/quickshell/niri-caelestia-shell" && \
-        (git tag -f 1.1.1 >/dev/null 2>&1 || true) && \
-        rm -rf build && \
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/ -DINSTALL_QMLDIR=usr/lib64/qt6/qml -DINSTALL_LIBDIR=usr/lib64/caelestia && \
-        cmake --build build && \
-        sudo cmake --install build && \
-        (if [ -d "/usr/lib/qt6/qml/Caelestia" ] && [ ! -d "/usr/lib64/qt6/qml/Caelestia" ]; then \
-            sudo cp -r /usr/lib/qt6/qml/Caelestia /usr/lib64/qt6/qml/; \
-        fi)
-
-# Install or update Antigravity CLI (agy)
-antigravity:
-    @echo "==> Installing / Updating Antigravity CLI..."
-    curl -fsSL https://antigravity.google/cli/install.sh | bash
-
-# Install or update pi-coding-agent via npm
-pi:
-    @echo "==> Installing / Updating pi-coding-agent..."
-    mkdir -p "{{ home }}/.npm-global"
-    npm config set prefix "{{ home }}/.npm-global"
-    npm install -g @earendil-works/pi-coding-agent

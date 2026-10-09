@@ -21,12 +21,13 @@
 
 ```text
 dotfiles-fedora/
-├── Justfile                      # 常用操作界面 (just apply, just dotfiles, just caelestia...)
+├── Justfile                      # 常用操作界面 (just apply, just dotfiles, just reload...)
 ├── README.md                     # 說明文件
 ├── .gitignore                    # 忽略 local.yml 與暫存檔
 │
 ├── scripts/
-│   └── bootstrap.sh              # 全新 Fedora 一鍵還原腳本
+│   ├── bootstrap.sh              # 全新 Fedora 一鍵還原腳本
+│   └── build-caelestia.sh        # （可選）手動編譯 Niri-Caelestia Shell QML 模組
 │
 ├── ansible/
 │   ├── playbook.yml              # 主 Playbook（分 System 與 User 兩大 Play）
@@ -142,14 +143,14 @@ just user
 # 直接用 GNU Stow 重新建立所有連結（不透過 Ansible，極速）
 just stow
 
-# 編譯並安裝 Niri-Caelestia Shell QML 模組
-just caelestia
+# 重啟桌面環境組件（Waybar, Mako, Niri 配置熱重載）
+just reload
 
-# 安裝或更新 Google Antigravity CLI (agy)
-just antigravity
+# 同步遠端儲存庫更新並自動重新連結與重載
+just pull
 
-# 安裝或更新 pi-coding-agent
-just pi
+# 檢查系統、CLI 與桌面工具依賴是否齊全
+just check
 
 # 升級系統 DNF 套件與 Flatpak 軟體
 just update
